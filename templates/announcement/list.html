@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}Менинг Эълонларим{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row ">
+        <div class="mb-3 col-12 d-flex justify-content-between align-items-center">
+            <h2>Менинг Эълонларим</h2>
+            <a href="{% url 'create_announcement' %}" class="btn btn-primary" style="width: 150px;">
+                <i class="bi bi-plus-lg"></i> Янги Эълон
+            </a>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for announcement in announcements %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <h5 class="card-title mb-0">
+                            {% if announcement.address == 'toshkent_andijon' %}
+                            Тошкент → Андижон
+                            {% else %}
+                            Андижон → Тошкент
+                            {% endif %}
+                        </h5>
+                        <span
+                            class="badge {% if announcement.id in active_announcements %}bg-success{% else %}bg-secondary{% endif %}">
+                            {% if announcement.id in active_announcements %}Фаол{% else %}Тўхтатилган{% endif %}
+                        </span>
+                    </div>
+
+                    <div class="announcement-details mb-3">
+                        <p class="mb-2">
+                            <i class="bi bi-calendar2-week"></i>
+                            <span class="text-primary">{{ announcement.time|date:"d-m-Y" }}</span>
+                            <i class="bi bi-clock ms-2"></i>
+                            <span class="text-primary">{{ announcement.time|date:"H:i" }}</span>
+                        </p>
+                        <p class="mb-2">
+                            <i class="bi bi-people"></i>
+                            {{ announcement.member }} та йўловчи керак
+                        </p>
+                        {% if announcement.women %}
+                        <p class="mb-2">
+                            <i class="bi bi-person-heart"></i>
+                            Аёл йўловчи бор
+                        </p>
+                        {% endif %}
+                        <p class="mb-2">
+                            <i class="bi bi-telephone"></i>
+                            {{ announcement.phone }}
+                        </p>
+                        <p class="mb-2">
+                            <i class="bi bi-arrow-repeat"></i>
+                            Ҳар {{ announcement.interval }} дақиқада такрорланади
+                        </p>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        {% if announcement.id in active_announcements %}
+                        <a href="{% url 'stop_announcement' announcement.id %}"
+                            class="btn btn-warning btn-sm flex-grow-1">
+                            <i class="bi bi-pause-circle"></i> Тўхтатиш
+                        </a>
+                        {% else %}
+                        <a href="{% url 'start_announcement' announcement.id %}"
+                            class="btn btn-success btn-sm flex-grow-1">
+                            <i class="bi bi-play-circle"></i> Бошлаш
+                        </a>
+                        {% endif %}
+                        <a href="{% url 'edit_announcement' announcement.id %}"
+                            class="btn btn-primary btn-sm flex-grow-1">
+                            <i class="bi bi-pencil"></i> Таҳрирлаш
+                        </a>
+                        <a href="{% url 'delete_announcement' announcement.id %}"
+                            class="btn btn-danger btn-sm flex-grow-1"
+                            onclick="return confirm('Ростдан ҳам бу эълонни ўчирмоқчимисиз?')">
+                            <i class="bi bi-trash"></i> Ўчириш
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <p class="mb-0">Ҳозирча эълонлар йўқ</p>
+                <a href="{% url 'create_announcement' %}" class="btn btn-primary mt-3">
+                    Янги Эълон Қўшиш
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

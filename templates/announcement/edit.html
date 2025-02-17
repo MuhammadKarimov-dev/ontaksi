@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}Эълонни таҳрирлаш{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white py-3">
+                    <h3 class="card-title mb-0 fs-4">Эълонни таҳрирлаш</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Йўналиш</label>
+                            <select name="address" class="form-select" required>
+                                <option value="toshkent_andijon" {% if announcement.address == 'toshkent_andijon' %}selected{% endif %}>Тошкентдан Андижонга</option>
+                                <option value="andijon_toshkent" {% if announcement.address == 'andijon_toshkent' %}selected{% endif %}>Андижондан Тошкентга</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Жўнаш вақти</label>
+                            <input type="datetime-local" name="time" class="form-control"
+                                value="{{ announcement.time|date:'Y-m-d\TH:i' }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Йўловчилар сони</label>
+                            <select name="member" class="form-select" required>
+                                {% for i in "12345678910"|make_list %}
+                                <option value="{{ forloop.counter }}" {% if announcement.member == forloop.counter %}selected{% endif %}>{{ forloop.counter }} та йўловчи</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3 form-check">
+                            <input type="checkbox" name="women" class="form-check-input" id="women" 
+                            {% if  announcement.women %}checked{% endif %}>
+                            <label class="form-check-label" for="women">Аёл йўловчи борми?</label>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Телефон рақам</label>
+                            <input type="tel" name="phone" class="form-control" pattern="\+998[0-9]{9}"
+                                placeholder="+998XXXXXXXXX" value="{{ announcement.phone }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Такрорлаш интервали (дақиқада)</label>
+                            <input name="interval" type="number" class="form-control" min="1"
+                                value="{{ announcement.interval }}" required placeholder="Масалан: 5 дақиқа" />
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg px-4">
+                                <i class="bi bi-check2-circle"></i> Сақлаш
+                            </button>
+                            <a href="{% url 'announcement_list' %}" class="btn btn-secondary btn-lg px-4">
+                                <i class="bi bi-x-circle"></i> Бекор қилиш
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

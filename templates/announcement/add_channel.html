@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Янги канал қўшиш{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white py-3">
+                    <h3 class="card-title mb-0 fs-4">Янги канал қўшиш</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">Канал номи</label>
+                            <input type="text" name="name" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Канал ID</label>
+                            <input type="text" name="channel_id" class="form-control" required>
+                            <div class="form-text">Масалан: @channel_name ёки 100123456789</div>
+                        </div>
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="bi bi-plus-circle"></i> Қўшиш
+                            </button>
+                            <a href="{% url 'channel_list' %}" class="btn btn-secondary px-4">
+                                <i class="bi bi-x-circle"></i> Бекор қилиш
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

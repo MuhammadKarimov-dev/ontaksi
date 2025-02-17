@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Такси Эълонлар - Бош Сахифа{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row mb-4">
+        <div class="col-12 text-center">
+            <h1>Такси Эълонлар</h1>
+            <p class="lead">Тошкент-Андижон йўналиши бўйича такси эълонлар</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'create_announcement' %}" class="btn btn-primary">
+                    Янги Эълон Бериш
+                </a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-primary">
+                    Эълон бериш учун тизимга киринг
+                </a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h2>Сўнгги Эълонлар</h2>
+            {% for announcement in announcements %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {% if announcement.address == 'toshkent_andijon' %}
+                                Тошкент → Андижон
+                            {% else %}
+                                Андижон → Тошкент
+                            {% endif %}
+                        </h5>
+                        <p class="card-text">
+                            <strong>Вақт:</strong> {{ announcement.time|date:"d-m-Y" }} ⏰ {{ announcement.time|date:"H:i" }}<br>
+                            <strong>{{ announcement.member }} та йўловчи керак</strong><br>
+                            {% if announcement.women %}
+                                <span class="badge bg-info">Аёл йўловчи бор</span><br>
+                            {% endif %}
+                            <strong>Тел:</strong> {{ announcement.phone }}
+                        </p>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="alert alert-info">
+                    Ҳозирча эълонлар йўқ
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
