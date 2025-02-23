@@ -27,11 +27,10 @@ event_thread = threading.Thread(target=start_event_loop, args=(main_loop,), daem
 event_thread.start()
 
 def home(request):
-    announcements = Announcement.objects.all().order_by('-time')[:10]
+    announcements = Announcement.objects.all().order_by('-id')[:10]
     return render(request, 'announcement/home.html', {'announcements': announcements})
 
 def login_view(request):
-    print("salomcha")
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -67,7 +66,6 @@ class AnnouncementTask:
 
     def run(self):
         global main_loop
-        message = format_message(self.announcement)
         print(f"⏳ Xabar yuborish boshlandi: {self.announcement_id}")
 
         while self.running:
@@ -81,14 +79,13 @@ class AnnouncementTask:
                 for channel in self.active_channels:
                     print(f"📤 {channel.channel_id} ga xabar yuborilmoqda...")
 
-                    # ✅ To‘g‘ri formatda koroutineni chaqiramiz
                     future = asyncio.run_coroutine_threadsafe(
-                        bot.send_message(channel.channel_id, message), 
+                        bot.send_message(channel.channel_id, self.announcement.message), 
                         main_loop
                     )
-                    future.result()  # Xatolik bo‘lsa shu yerda aniqlanadi
+                    future.result()
 
-                print(f"{self.announcement.interval }✅ Xabar yuborildi: {message}")
+                print(f"✅ Xabar yuborildi: {self.announcement.message}")
                 time.sleep(self.announcement.interval * 60)
             except Exception as e:
                 print(f"❌ Xato yuz berdi: {e}")
@@ -135,69 +132,44 @@ def delete_announcement(request, announcement_id):
     return redirect('announcement_list')
 
 @login_required
+def create_announcement(request):
+    if request.method == 'POST':
+        Announcement.objects.create(
+            user=request.user,
+            message=request.POST.get('message'),
+            interval=int(request.POST.get('interval', 5))
+        )
+        return redirect('announcement_list')
+    return render(request, 'announcement/create.html')
+
+@login_required
 def edit_announcement(request, announcement_id):
     global announcement_tasks
     announcement = Announcement.objects.get(id=announcement_id)
     
     if request.method == 'POST':
         if announcement.user == request.user:
-            # E'lonni yangilaymiz
-            announcement.address = request.POST.get('address')
-            announcement.time = request.POST.get('time')
-            announcement.member = request.POST.get('member')
-            announcement.women = request.POST.get('women') == 'on'
-            announcement.phone = request.POST.get('phone')
+            announcement.message = request.POST.get('message')
             announcement.interval = int(request.POST.get('interval', 5))
             announcement.save()
 
-            # Agar e'lon active bo'lsa, to'xtatamiz
             if announcement_id in announcement_tasks:
                 announcement_tasks[announcement_id].stop()
                 del announcement_tasks[announcement_id]
                 messages.info(request, 'Эълон таҳрирланди. Қайта ишга тушириш учун "Бошлаш" тугмасини босинг.')
-
             return redirect('announcement_list')
     context = {'announcement': announcement}
     return render(request, 'announcement/edit.html', context)
 
 @login_required
 def announcement_list(request):
-    announcements = Announcement.objects.filter(user=request.user)
+    announcements = Announcement.objects.filter(user=request.user).order_by('id')
     context = {
         'announcements': announcements,
         'active_announcements': list(announcement_tasks.keys())
     }
     return render(request, 'announcement/list.html', context)
 
-@login_required
-def create_announcement(request):
-    if request.method == 'POST':
-        Announcement.objects.create(
-            user=request.user,
-            address=request.POST.get('address'),
-            time=request.POST.get('time'),
-            member=request.POST.get('member'),
-            women=request.POST.get('women') == 'on',
-            phone=request.POST.get('phone'),
-            interval=int(request.POST.get('interval', 5))
-        )
-        return redirect('announcement_list')
-    return render(request, 'announcement/create.html')
-
-def format_message(announcement):
-    women_status = "👩 АЁЛ КИШИ БОР" if announcement.women else "👩 АЁЛ КИШИ ЙЎҚ"
-    direction = "ТОШКЕНТДАН" if announcement.address == 'toshkent_andijon' else "АНДИЖОНДАН"
-    destination = "АНДИЖОНГА" if announcement.address == 'toshkent_andijon' else "ТОШКЕНТГА"
-
-    return f"""
-👉 {direction} 👈
-👉 {destination} 👈
-
-🗓 {announcement.time.strftime('%d-%m-%Y ⏰ %H:%M')} да юрамиз
-{women_status}
-👥 {announcement.member} та йўловчи керак
-📞 {announcement.phone}
-"""
 @login_required
 def channel_list(request):
     channels = TelegramChannel.objects.all()
@@ -215,11 +187,17 @@ def add_channel(request):
         if channel_id.replace('-', '').isdigit() and not channel_id.startswith('-'):
             channel_id = f"-{channel_id}"
 
+        # Check if channel already exists
+        if TelegramChannel.objects.filter(channel_id=channel_id).exists():
+            messages.error(request, 'Бу канал аллақачон мавжуд!')
+            return redirect('channel_list')
+
         TelegramChannel.objects.create(
             channel_id=channel_id,
             channel_name=name,
             is_active=True
         )
+        messages.success(request, 'Канал муваффақиятли қўшилди!')
         return redirect('channel_list')
     return render(request, 'announcement/add_channel.html')
 

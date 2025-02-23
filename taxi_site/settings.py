@@ -137,3 +137,14 @@ CSRF_TRUSTED_ORIGINS = [
     "http://*",    # Ngrok domeningizni shu yerga qo‘shing
     'https://*.ngrok-free.app'
 ]
+import os
+
+
+STATIC_URL = '/static/'  # Static URL yo‘li
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),  # Static fayllar joylashgan papka
+]
+
+# Static fayllarni yig‘ish uchun
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  

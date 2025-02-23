@@ -1,52 +1,47 @@
 {% extends 'base.html' %}
 
-{% block title %}Такси Эълонлар - Бош Сахифа{% endblock %}
+{% block title %}Такси Эълонлар - Бош Саҳифа{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row mb-4">
-        <div class="col-12 text-center">
-            <h1>Такси Эълонлар</h1>
-            <p class="lead">Тошкент-Андижон йўналиши бўйича такси эълонлар</p>
+<div class="container py-4">
+    <div class="row mb-4 text-center">
+        <div class="col-12">
+            <h1 class="fw-bold text-dark">🚖 Такси Эълонлар</h1>
+            <p class="lead text-muted">Тошкент-Андижон йўналиши бўйича тезкор такси эълонлар</p>
             {% if user.is_authenticated %}
-                <a href="{% url 'create_announcement' %}" class="btn btn-primary">
-                    Янги Эълон Бериш
-                </a>
+            <a href="{% url 'create_announcement' %}" class="btn btn-success btn-lg px-4 shadow">
+                <i class="bi bi-plus-circle"></i> Янги Эълон Бериш
+            </a>
             {% else %}
-                <a href="{% url 'login' %}" class="btn btn-primary">
-                    Эълон бериш учун тизимга киринг
-                </a>
+            <a href="{% url 'login' %}" class="btn btn-primary btn-lg px-4 shadow">
+                <i class="bi bi-person"></i> Эълон бериш учун тизимга киринг
+            </a>
             {% endif %}
         </div>
     </div>
 
     <div class="row">
         <div class="col-12">
-            <h2>Сўнгги Эълонлар</h2>
+            <h2 class="fw-bold mb-3">🔥 Сўнгги Эълонлар</h2>
             {% for announcement in announcements %}
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">
-                            {% if announcement.address == 'toshkent_andijon' %}
-                                Тошкент → Андижон
-                            {% else %}
-                                Андижон → Тошкент
-                            {% endif %}
+            <div class="card shadow-sm border-0 mb-4">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h5 class="fw-bold mb-0">
+                            📢 Эълон #{{ announcement.id }}
                         </h5>
-                        <p class="card-text">
-                            <strong>Вақт:</strong> {{ announcement.time|date:"d-m-Y" }} ⏰ {{ announcement.time|date:"H:i" }}<br>
-                            <strong>{{ announcement.member }} та йўловчи керак</strong><br>
-                            {% if announcement.women %}
-                                <span class="badge bg-info">Аёл йўловчи бор</span><br>
-                            {% endif %}
-                            <strong>Тел:</strong> {{ announcement.phone }}
-                        </p>
+                        <span class="badge bg-warning text-dark">
+                            🔄 {{ announcement.interval }} дақиқа
+                        </span>
                     </div>
+                    <hr>
+                    <div style="white-space: pre-wrap;">{{ announcement.message }}</div>
                 </div>
+            </div>
             {% empty %}
-                <div class="alert alert-info">
-                    Ҳозирча эълонлар йўқ
-                </div>
+            <div class="alert alert-info text-center p-4">
+                ❌ Ҳозирча эълонлар йўқ
+            </div>
             {% endfor %}
         </div>
     </div>

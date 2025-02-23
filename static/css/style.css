@@ -1,0 +1,335 @@
+/* === Asosiy ranglar === */
+:root {
+  --primary-color: #ffd700; /* Sariq */
+  --dark-color: #000000; /* Qora */
+  --light-gray: #f8f9fa; /* Yengil kulrang */
+}
+
+/* === Navbar === */
+.navbar {
+  background-color: var(--primary-color) !important;
+  padding: 10px 0;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-nav {
+  gap: 10px;
+}
+
+.navbar-nav .nav-link {
+  font-weight: bold;
+  color: black !important;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.navbar-nav .nav-link:hover {
+  background-color: black !important;
+  color: var(--primary-color) !important;
+}
+
+/* === Mobil Navbar === */
+@media (max-width: 991px) {
+  .navbar-toggler {
+      display: none !important;
+  }
+
+  .navbar-collapse {
+      display: none !important;
+  }
+
+  .d-lg-none {
+      display: flex !important;
+      align-items: center;
+  }
+
+  .d-lg-none .nav-link {
+      font-size: 16px;
+      font-weight: bold;
+      padding: 10px 15px;
+      background-color: black;
+      color: white !important;
+      border-radius: 5px;
+  }
+
+  .d-lg-none .nav-link:hover {
+      background-color: white;
+      color: black !important;
+      border: 1px solid black;
+  }
+}
+
+/* === Mobil Footer (Pastki Menyu) === */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--dark-color);
+  display: flex;
+  justify-content: space-around;
+
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.bottom-nav-link {
+  text-decoration: none;
+  color: white;
+  font-size: 14px;
+  text-align: center;
+  font-weight: bold;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: 0.3s;
+  padding-bottom: 4px;
+
+}
+
+.bottom-nav-link i {
+  font-size: 20px;
+  margin-bottom: -10px;
+  padding-top: 4px;
+}
+
+.bottom-nav-link:hover {
+  color: var(--primary-color);
+}
+
+.bottom-nav-link.active {
+  background-color: var(--primary-color);
+  color: black;
+}
+
+/* === Asosiy sarlavha === */
+.page-title {
+  font-size: 26px;
+  font-weight: bold;
+  color: var(--dark-color);
+}
+
+/* === Tugmalar === */
+.btn-primary {
+  background-color: var(--primary-color);
+  border: none;
+  color: black;
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+  background-color: black;
+  color: white;
+}
+
+/* === Kartalar === */
+.card {
+  border: 1px solid var(--light-gray);
+  border-radius: 10px;
+  transition: 0.2s;
+}
+
+.card:hover {
+  transform: none;
+}
+
+/* === Telefon raqam badge === */
+.phone-badge {
+  background-color: var(--primary-color);
+  color: black;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+/* === Jadval === */
+.table-hover tbody tr:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.table thead {
+  background-color: var(--light-gray);
+}
+
+.badge {
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+/* === Matnni qisqartirish === */
+.truncate-text {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* === Mobil uchun optimallashtirish === */
+@media (max-width: 762px) {
+  .truncate-text {
+      max-width: 140px;
+  }
+
+  .btn-group .btn {
+      font-size: 12px;
+      padding: 3px 6px;
+  }
+
+  /* "Ҳолати" ustuni mobilda ham ko‘rinsin */
+  table th:nth-child(4), table td:nth-child(4) {
+      display: table-cell !important;
+  }
+}
+
+/* === Sahifa maksimal kengligi === */
+@media (min-width: 1024px) {
+  .container {
+      max-width: 1000px;
+  }
+}
+
+/* === Hoverni faqat kerakli elementlarga cheklash === */
+.card:hover,
+table tr:hover {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  cursor: default !important;
+}
+
+/* Faqat tugmalar va havolalar uchun hover qoldirish */
+.card a:hover,
+.card button:hover,
+table a:hover,
+table button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* === Kanal nomi qora bo‘lsin === */
+.channel-link {
+  font-weight: bold;
+  text-decoration: none;
+  color: black !important;
+}
+
+.channel-link:hover {
+  color: #333 !important;
+}
+
+/* === Modal dizayni === */
+.modal-content {
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+}
+
+.modal-header {
+  background-color: var(--primary-color);
+  color: black;
+  font-weight: bold;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.modal-footer {
+  border-top: 1px solid var(--light-gray);
+}
+
+.modal-body {
+  font-size: 16px;
+}
+
+/* === Jadval kichrayganda yozuvlar kamaymasin === */
+@media (max-width: 500px) {
+  .table td, .table th {
+      font-size: 14px !important;
+      padding: 8px !important;
+  }
+}
+
+/* === Jadval moslashuvchanligi === */
+@media (max-width: 990px) {
+  /* Faqat ID, Канал va Ҳолати ko‘rinsin */
+  .table th:nth-child(4), .table td:nth-child(4) { /* Ҳолати */
+    display: table-cell !important;
+  }
+
+  .table th:nth-child(3), .table td:nth-child(3), /* ID */
+  .table th:nth-child(5), .table td:nth-child(5)  /* Амаллар */
+  {
+    display: none;
+  }
+}
+
+/* === 762px dan kichik holatda faqat №, Канал va Ҳолати chiqadi === */
+@media (max-width: 762px) {
+  .table th:nth-child(3), .table td:nth-child(3), /* ID */
+  .table th:nth-child(5), .table td:nth-child(5)  /* Амаллар */
+  {
+    display: none;
+  }
+
+  /* Matn hajmi kamaymasin, faqat qisqartirilsin */
+  .truncate-text {
+    max-width: 140px; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* === 500px dan kichik ekranlarda jadval to‘liq ekranga moslashsin === */
+@media (max-width: 500px) {
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+/* === Matn uzun bo‘lsa, "..." bilan qisqartirish === */
+.truncate-text {
+  max-width: 200px;  /* Maksimal kenglik */
+  white-space: nowrap;  /* Matnni bir qatorda saqlaydi */
+  overflow: hidden;  /* Sig‘magan qismini yashiradi */
+  text-overflow: ellipsis;  /* Sig‘magan qismni "..." bilan almashtiradi */
+}
+
+/* 990px dan kichik ekranlarda jadval to'liq sig'ib ketishi uchun */
+@media (max-width: 990px) {
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+
+/* 762px dan kichik ekranlarda ID va Amallar ustunlarini yashirish */
+@media (max-width: 762px) {
+  .table th:nth-child(3), .table td:nth-child(3), /* ID */
+  .table th:nth-child(5), .table td:nth-child(5)  /* Amallar */
+  {
+    display: none;
+  }
+
+  /* Matnni sig'dirish uchun avtomatik qisqartirish */
+  .truncate-text {
+    max-width: 140px; 
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+/* 500px dan kichik ekranlarda jadval ekranga sig'sin */
+@media (max-width: 500px) {
+  .table-responsive {
+    overflow-x: auto;
+  }
+  
+  .table td, .table th {
+    font-size: 14px !important;
+    padding: 8px !important;
+  }
+}
