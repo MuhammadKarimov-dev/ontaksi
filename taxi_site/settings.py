@@ -134,9 +134,10 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://*",  # Barcha HTTPS domenlar uchun
-    "http://*",    # Ngrok domeningizni shu yerga qo‘shing
-    'https://*.ngrok-free.app'
+    "http://ontaksi.uz",
+    "https://ontaksi.uz",
+    "http://www.ontaksi.uz",
+    "https://www.ontaksi.uz",
 ]
 import os
 
