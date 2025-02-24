@@ -1,26 +1,11 @@
-<footer class="footer mt-auto py-4 bg-dark text-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4 mb-3">
-                <h5>Yo'nalishlar</h5>
-                <ul class="list-unstyled">
-                    <li>Toshkent → Andijon</li>
-                    <li>Andijon → Toshkent</li>
-                </ul>
-            </div>
-            <div class="col-md-4 mb-3">
-                <h5>Bog'lanish</h5>
-                <ul class="list-unstyled">
-                    <li><i class="bi bi-telephone"></i> {{ ADMIN_PHONE }}</li>
-                    <li><i class="bi bi-telegram"></i> {{ ADMIN_TELEGRAM }}</li>
-                </ul>
-            </div>
-            <div class="col-md-4 mb-3">
-                <h5>Ish vaqti</h5>
-                <p>24/7 xizmatingizda</p>
-                <p class="small">Toshkent-Andijon yo'nalishi bo'yicha ishonchli taxi xizmati</p>
-            </div>
-        </div>
-        
-    </div>
-</footer>
+<div class="mobile-bottom-nav d-lg-none">
+    <a href="{% url 'create_announcement' %}" class="bottom-nav-link {% if request.resolver_match.url_name == 'create_announcement' %}active{% endif %}">
+        <i class="bi bi-plus-circle"></i> <br> E’lon berish
+    </a>
+    <a href="{% url 'announcement_list' %}" class="bottom-nav-link {% if request.resolver_match.url_name == 'announcement_list' %}active{% endif %}">
+        <i class="bi bi-megaphone"></i> <br> E’lonlar
+    </a>
+    <a href="{% url 'channel_list' %}" class="bottom-nav-link {% if request.resolver_match.url_name == 'channel_list' %}active{% endif %}">
+        <i class="bi bi-broadcast"></i> <br> Kanallar
+    </a>
+</div>

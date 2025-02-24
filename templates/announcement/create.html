@@ -1,57 +1,33 @@
 {% extends 'base.html' %}
 
-{% block title %}Yangi E'lon Qo'shish{% endblock %}
+{% block title %}Янги Эълон Қўшиш{% endblock %}
 
 {% block content %}
-<div class="container py-4">
+<div class="container">
     <div class="row justify-content-center">
         <div class="col-12 col-md-10 col-lg-8">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white py-3">
-                    <h3 class="card-title mb-0 fs-4">Янги Эълон Қўшиш</h3>
+            <div class="card border-0 shadow-sm">
+                <div class="card-header py-3 text-center" style="background-color: var(--primary-color); color: black; font-weight: bold;">
+                    <h3 class="mb-0 fs-4">Янги Эълон Қўшиш</h3>
                 </div>
                 <div class="card-body p-4">
                     <form method="post">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label class="form-label">Yo'nalish</label>
-                            <select name="address" class="form-select" required>
-                                <option value="">Yo'nalishni tanlang</option>
-                                <option value="toshkent_andijon">Toshkentdan Andijonga</option>
-                                <option value="andijon_toshkent">Andijondan Toshkentga</option>
-                            </select>
+                            <label class="form-label fw-bold">Эълон матни</label>
+                            <textarea name="message" class="form-control form-control-lg" rows="5" required 
+                                placeholder="Эълон матнини киритинг..."></textarea>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Jo'nash vaqti</label>
-                            <input type="datetime-local" name="time" class="form-control" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Yo'lovchilar soni</label>
-                            <select name="member" class="form-select" required>
-                                {% for i in "1234567891"|make_list %}
-                                <option value="{{ forloop.counter }}">{{ forloop.counter }} ta yo'lovchi</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="mb-3 form-check">
-                            <input type="checkbox" name="women" class="form-check-input" id="women">
-                            <label class="form-check-label" for="women">Ayol yo'lovchi bormi?</label>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Telefon raqam</label>
-                            <input type="tel" name="phone" class="form-control" pattern="\+998[0-9]{9}"
-                                placeholder="+998XXXXXXXXX" required>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Такрорлаш интервали (дақиқада)</label>
-                            <input name="interval" type="number" class="form-control" min="1" value="5" required
+                            <label class="form-label fw-bold">Такрорлаш интервали (дақиқада)</label>
+                            <input name="interval" type="number" class="form-control form-control-lg" min="1" value="5" required
                                 placeholder="Масалан: 5 дақиқа" />
                         </div>
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-                            <button type="submit" class="btn btn-primary btn-lg px-4">
+                        <div class="d-grid gap-3 mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg w-100">
                                 <i class="bi bi-plus-circle"></i> Эълон бериш
                             </button>
-                            <a href="{% url 'announcement_list' %}" class="btn btn-secondary btn-lg px-4">
+                            <a href="{% url 'announcement_list' %}" class="btn btn-secondary btn-lg w-100">
                                 <i class="bi bi-x-circle"></i> Бекор қилиш
                             </a>
                         </div>
