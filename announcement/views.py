@@ -44,7 +44,6 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
-
 class AnnouncementTask:
     def __init__(self, announcement_id, announcement, active_channels):
         self.announcement_id = announcement_id
@@ -64,33 +63,21 @@ class AnnouncementTask:
     def stop(self):
         self.running = False
 
-    def run(self):
-        global main_loop
-        print(f"⏳ Xabar yuborish boshlandi: {self.announcement_id}")
-
-        while self.running:
+    async def send_messages(self):
+        bot = TelegramBot()
+        for channel in self.active_channels:
             try:
-                if main_loop.is_closed():
-                    print("⚠️ Event loop yopilib qolgan! Qayta ishga tushiramiz...")
-                    main_loop = asyncio.new_event_loop()
-                    event_thread = threading.Thread(target=start_event_loop, args=(main_loop,), daemon=True)
-                    event_thread.start()
-
-                for channel in self.active_channels:
-                    print(f"📤 {channel.channel_id} ga xabar yuborilmoqda...")
-
-                    future = asyncio.run_coroutine_threadsafe(
-                        bot.send_message(channel.channel_id, self.announcement.message), 
-                        main_loop
-                    )
-                    future.result()
-
-                print(f"✅ Xabar yuborildi: {self.announcement.message}")
-                time.sleep(self.announcement.interval * 60)
+                print(f"📤 {channel.channel_id} ga xabar yuborilmoqda...")
+                await bot.send_message(channel.channel_id, self.announcement.message)
             except Exception as e:
                 print(f"❌ Xato yuz berdi: {e}")
-                asyncio.sleep(5)
 
+    def run(self):
+        print(f"⏳ Xabar yuborish boshlandi: {self.announcement_id}")
+        while self.running:
+            asyncio.run(self.send_messages())  # ✅ To‘g‘ri ishlaydigan asinxron kod
+            time.sleep(self.announcement.interval * 60)
+            
 
 @login_required
 def start_announcement(request, announcement_id):
