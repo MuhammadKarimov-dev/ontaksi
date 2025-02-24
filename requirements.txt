@@ -2,3 +2,5 @@ django
 djangorestframework
 pyrogram
 tgcrypto
+pyrogram
+celery

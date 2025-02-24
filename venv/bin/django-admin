@@ -1,4 +1,6 @@
-#!/Users/macbookair/Desktop/TaxiSayt/venv/bin/python3.11
+#!/bin/sh
+'''exec' "/Users/macbookair/Desktop/TaxiSayt 4/venv/bin/python3.11" "$0" "$@"
+' '''
 # -*- coding: utf-8 -*-
 import re
 import sys

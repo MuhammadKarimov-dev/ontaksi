@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Announcement, TelegramChannel
+from .models import Announcement, TelegramChannel, ActiveTask
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
@@ -16,3 +16,9 @@ class TelegramChannelAdmin(admin.ModelAdmin):
     list_display = ('channel_name', 'channel_id', 'is_active')
     list_filter = ('is_active',)
     search_fields = ('channel_name', 'channel_id')
+
+@admin.register(ActiveTask)
+class ActiveTaskAdmin(admin.ModelAdmin):
+    list_display = ('announcement', 'is_active', 'created_at')
+    list_filter = ('is_active', 'created_at')
+    search_fields = ('announcement__message',)

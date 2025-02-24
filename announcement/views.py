@@ -1,30 +1,31 @@
 import asyncio
-import threading
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
-from .models import Announcement, TelegramChannel
+from .models import Announcement, TelegramChannel,ActiveTask
 from bot_manager.telegram_bot import TelegramBot
-import time
 from django.contrib import messages 
+from celery import shared_task
+from celery.schedules import crontab
+from django.conf import settings
+from django.core.management import call_command
+import threading
 
-
-announcement_tasks = {}
 bot = TelegramBot()
 
-# ✅ Asosiy asyncio event loop yaratamiz
-main_loop = asyncio.new_event_loop()
-
-# ✅ Event loopni fon thread'da ishga tushiramiz
-def start_event_loop(loop):
-    asyncio.set_event_loop(loop)
+@shared_task
+def send_announcement(announcement_id):
     try:
-        loop.run_forever()
-    except RuntimeError:
-        pass  # Agar loop yopilib qolsa, uni qayta ochishimiz kerak
-
-event_thread = threading.Thread(target=start_event_loop, args=(main_loop,), daemon=True)
-event_thread.start()
+        announcement = Announcement.objects.get(id=announcement_id)
+        active_channels = TelegramChannel.objects.filter(is_active=True)
+        
+        for channel in active_channels:
+            print(f"📤 {channel.channel_id} ga xabar yuborilmoqda...")
+            bot.send_message(channel.channel_id, announcement.message)
+            
+        print(f"✅ Xabar yuborildi: {announcement.message}")
+    except Exception as e:
+        print(f"❌ Xato yuz berdi: {e}")
 
 def home(request):
     announcements = Announcement.objects.all().order_by('-id')[:10]
@@ -44,77 +45,49 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
-class AnnouncementTask:
-    def __init__(self, announcement_id, announcement, active_channels):
-        self.announcement_id = announcement_id
-        self.announcement = announcement
-        self.active_channels = active_channels
-        self.running = False
-        self.thread = None
-
-    def start(self):
-        if self.running:
-            return
-
-        self.running = True
-        self.thread = threading.Thread(target=self.run, daemon=True)
-        self.thread.start()
-
-    def stop(self):
-        self.running = False
-
-    async def send_messages(self):
-        bot = TelegramBot()
-        for channel in self.active_channels:
-            try:
-                print(f"📤 {channel.channel_id} ga xabar yuborilmoqda...")
-                await bot.send_message(channel.channel_id, self.announcement.message)
-            except Exception as e:
-                print(f"❌ Xato yuz berdi: {e}")
-
-    def run(self):
-        print(f"⏳ Xabar yuborish boshlandi: {self.announcement_id}")
-        while self.running:
-            asyncio.run(self.send_messages())  # ✅ To‘g‘ri ishlaydigan asinxron kod
-            time.sleep(self.announcement.interval * 60)
-            
 
 @login_required
 def start_announcement(request, announcement_id):
-    global announcement_tasks
-
-    if announcement_id in announcement_tasks:
-        announcement_tasks[announcement_id].stop()
-        del announcement_tasks[announcement_id]
-
     announcement = Announcement.objects.get(id=announcement_id)
     active_channels = TelegramChannel.objects.filter(is_active=True)
+    
     if active_channels.count() == 0:
         messages.error(request, 'Фаол каналлар топилмади!')
         return redirect('channel_list')
-        
-    task = AnnouncementTask(announcement_id, announcement, active_channels)
-    announcement_tasks[announcement_id] = task
-    task.start()
-
+    
+    # Create ActiveTask
+    ActiveTask.objects.create(
+        announcement_id=announcement_id,
+        is_active=True
+    )
+    
+    # Start sending in background
+    thread = threading.Thread(
+        target=call_command,
+        args=('announcement_sender', 'start', announcement_id),
+        daemon=True
+    )
+    thread.start()
+    
+    messages.success(request, 'Эълон юбориш бошланди!')
     return redirect('announcement_list')
 
 @login_required
 def stop_announcement(request, announcement_id):
-    global announcement_tasks
-    if announcement_id in announcement_tasks:
-        announcement_tasks[announcement_id].stop()
-        del announcement_tasks[announcement_id]
+    # Stop the task
+    ActiveTask.objects.filter(
+        announcement_id=announcement_id,
+        is_active=True
+    ).update(is_active=False)
+    
+    messages.info(request, 'Эълон юбориш тўхтатилди!')
     return redirect('announcement_list')
 
 @login_required
 def delete_announcement(request, announcement_id):
-    global announcement_tasks
     announcement = Announcement.objects.get(id=announcement_id)
     if announcement.user == request.user:
-        if announcement_id in announcement_tasks:
-            announcement_tasks[announcement_id].stop()
-            del announcement_tasks[announcement_id]
+        ActiveTask.objects.filter(announcement_id=announcement_id).delete()
         announcement.delete()
     return redirect('announcement_list')
 
@@ -131,7 +104,6 @@ def create_announcement(request):
 
 @login_required
 def edit_announcement(request, announcement_id):
-    global announcement_tasks
     announcement = Announcement.objects.get(id=announcement_id)
     
     if request.method == 'POST':
@@ -139,11 +111,9 @@ def edit_announcement(request, announcement_id):
             announcement.message = request.POST.get('message')
             announcement.interval = int(request.POST.get('interval', 5))
             announcement.save()
-
-            if announcement_id in announcement_tasks:
-                announcement_tasks[announcement_id].stop()
-                del announcement_tasks[announcement_id]
-                messages.info(request, 'Эълон таҳрирланди. Қайта ишга тушириш учун "Бошлаш" тугмасини босинг.')
+            
+            ActiveTask.objects.filter(announcement_id=announcement_id).delete()
+            messages.info(request, 'Эълон таҳрирланди. Қайта ишга тушириш учун "Бошлаш" тугмасини босинг.')
             return redirect('announcement_list')
     context = {'announcement': announcement}
     return render(request, 'announcement/edit.html', context)
@@ -151,9 +121,13 @@ def edit_announcement(request, announcement_id):
 @login_required
 def announcement_list(request):
     announcements = Announcement.objects.filter(user=request.user).order_by('id')
+    active_tasks = ActiveTask.objects.filter(
+        is_active=True
+    ).values_list('announcement_id', flat=True)
+    
     context = {
         'announcements': announcements,
-        'active_announcements': list(announcement_tasks.keys())
+        'active_announcements': list(active_tasks)
     }
     return render(request, 'announcement/list.html', context)
 
