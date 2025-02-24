@@ -5,27 +5,11 @@ from django.contrib.auth import login, authenticate, logout
 from .models import Announcement, TelegramChannel,ActiveTask
 from bot_manager.telegram_bot import TelegramBot
 from django.contrib import messages 
-from celery import shared_task
-from celery.schedules import crontab
+
 from django.conf import settings
 from django.core.management import call_command
 import threading
 
-bot = TelegramBot()
-
-@shared_task
-def send_announcement(announcement_id):
-    try:
-        announcement = Announcement.objects.get(id=announcement_id)
-        active_channels = TelegramChannel.objects.filter(is_active=True)
-        
-        for channel in active_channels:
-            print(f"📤 {channel.channel_id} ga xabar yuborilmoqda...")
-            bot.send_message(channel.channel_id, announcement.message)
-            
-        print(f"✅ Xabar yuborildi: {announcement.message}")
-    except Exception as e:
-        print(f"❌ Xato yuz berdi: {e}")
 
 def home(request):
     announcements = Announcement.objects.all().order_by('-id')[:10]
