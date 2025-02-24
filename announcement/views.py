@@ -9,6 +9,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.core.management import call_command
 import threading
+bot = TelegramBot()
 
 
 def home(request):
