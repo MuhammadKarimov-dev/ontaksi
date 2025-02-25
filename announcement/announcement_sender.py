@@ -22,7 +22,7 @@ def send_messages(announcement_id):
                 bot.send_message_sync(channel.channel_id, announcement.message)
                 print(f"✅ Xabar yuborildi: {channel.channel_id}")
 
-            time.sleep(announcement.interval * 60)  # Xabar yuborish oralig‘i
+            time.sleep(0.5)  # Xabar yuborish oralig‘i
 
         except Exception as e:
             print(f"❌ Xato: {e}")

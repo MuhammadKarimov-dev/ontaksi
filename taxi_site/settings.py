@@ -1,4 +1,3 @@
-
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -116,22 +115,63 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*",  # Barcha HTTPS domenlar uchun
-    "http://*",    # Ngrok domeningizni shu yerga qo‘shing
+    "http://*",    # Ngrok domeningizni shu yerga qo'shing
     'https://*.ngrok-free.app'
 ]
 import os
 
 
-STATIC_URL = '/static/'  # Static URL yo‘li
+STATIC_URL = '/static/'  # Static URL yo'li
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),  # Static fayllar joylashgan papka
 ]
 
-# Static fayllarni yig‘ish uchun
+# Static fayllarni yig'ish uchun
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  
 
 
 
 LOGIN_URL = 'login'  # login_view funksiyasining name'i
 LOGIN_REDIRECT_URL = 'home' 
+
+# Thread va Memory settings
+MAX_WORKER_THREADS = 10
+MAX_MEMORY_PERCENT = 80
+MONITORING_INTERVAL = 60  # seconds
+
+# Alert thresholds
+MEMORY_ALERT_THRESHOLD = 85  # percentage
+ERROR_ALERT_THRESHOLD = 10  # errors per minute
+
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+            'formatter': 'verbose',
+        },
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        '': {
+            'handlers': ['file', 'console'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+    },
+} 
