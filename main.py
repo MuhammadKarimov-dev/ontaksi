@@ -1,6 +1,6 @@
 from pyrogram import Client
 
-api_id='27075572 '
+api_id='27075572pip install --upgrade pyrogram tgcrypto'
 api_hash='1b56557db16cca997768fe87a724e75b'
 
 app = Client("user_taxi", api_id, api_hash)
