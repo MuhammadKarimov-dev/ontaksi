@@ -14,8 +14,7 @@ SECRET_KEY = 'django-insecure-@i)!+(41weo9jc21w&r3959^0$d)bytq4+8_r40!-7b2jh0$wj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['81.200.146.99', 'ontaksi.uz', 'www.ontaksi.uz', '127.0.0.1', 'localhost']
-
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -60,7 +59,7 @@ TEMPLATES = [
     },
 ]
 
-ASGI_APPLICATION = "taxi_site.asgi.application"
+ASGI_APPLICATION = "TaxiSayt.asgi.application"
 
 
 # Database
@@ -116,11 +115,9 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://ontaksi.uz",
-    "http://www.ontaksi.uz",
-    "https://ontaksi.uz",
-    "https://www.ontaksi.uz",
-    "https://*.ngrok-free.app"
+    "https://*",  # Barcha HTTPS domenlar uchun
+    "http://*",    # Ngrok domeningizni shu yerga qo‘shing
+    'https://*.ngrok-free.app'
 ]
 import os
 

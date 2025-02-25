@@ -1,16 +1,10 @@
-import asyncio
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
-from .models import Announcement, TelegramChannel,ActiveTask
-from bot_manager.telegram_bot import TelegramBot
+from .models import Announcement, TelegramChannel
 from django.contrib import messages 
-
-from django.conf import settings
-from django.core.management import call_command
 import threading
-bot = TelegramBot()
-
+from announcement.announcement_sender import send_messages
 
 def home(request):
     announcements = Announcement.objects.all().order_by('-id')[:10]
@@ -33,46 +27,29 @@ def logout_view(request):
 
 @login_required
 def start_announcement(request, announcement_id):
-    announcement = Announcement.objects.get(id=announcement_id)
-    active_channels = TelegramChannel.objects.filter(is_active=True)
-    
-    if active_channels.count() == 0:
-        messages.error(request, 'Фаол каналлар топилмади!')
-        return redirect('channel_list')
-    
-    # Create ActiveTask
-    ActiveTask.objects.create(
-        announcement_id=announcement_id,
-        is_active=True
-    )
-    
-    # Start sending in background
-    thread = threading.Thread(
-        target=call_command,
-        args=('announcement_sender', 'start', announcement_id),
-        daemon=True
-    )
-    thread.start()
-    
-    messages.success(request, 'Эълон юбориш бошланди!')
-    return redirect('announcement_list')
+    announcement = get_object_or_404(Announcement, id=announcement_id)
+    if announcement.user==request.user:
+        announcement.is_active = True
+        announcement.save()
+        thread = threading.Thread(target=send_messages, args=(announcement_id,), daemon=True)
+        thread.start()
+    else:
+        messages.error(request, 'Ushbu e’lonni faqat elon yaratgan foydalanuvchi ozgartira oladi!')
+
+    return redirect("announcement_list")  # E’lonlar sahifasiga qaytarish
 
 @login_required
 def stop_announcement(request, announcement_id):
-    # Stop the task
-    ActiveTask.objects.filter(
-        announcement_id=announcement_id,
-        is_active=True
-    ).update(is_active=False)
+    announcement = get_object_or_404(Announcement, id=announcement_id)
+    announcement.is_active = False
+    announcement.save()
     
-    messages.info(request, 'Эълон юбориш тўхтатилди!')
-    return redirect('announcement_list')
+    return redirect("announcement_list")
 
 @login_required
 def delete_announcement(request, announcement_id):
     announcement = Announcement.objects.get(id=announcement_id)
     if announcement.user == request.user:
-        ActiveTask.objects.filter(announcement_id=announcement_id).delete()
         announcement.delete()
     return redirect('announcement_list')
 
@@ -96,8 +73,7 @@ def edit_announcement(request, announcement_id):
             announcement.message = request.POST.get('message')
             announcement.interval = int(request.POST.get('interval', 5))
             announcement.save()
-            
-            ActiveTask.objects.filter(announcement_id=announcement_id).delete()
+        
             messages.info(request, 'Эълон таҳрирланди. Қайта ишга тушириш учун "Бошлаш" тугмасини босинг.')
             return redirect('announcement_list')
     context = {'announcement': announcement}
@@ -106,13 +82,8 @@ def edit_announcement(request, announcement_id):
 @login_required
 def announcement_list(request):
     announcements = Announcement.objects.filter(user=request.user).order_by('id')
-    active_tasks = ActiveTask.objects.filter(
-        is_active=True
-    ).values_list('announcement_id', flat=True)
-    
     context = {
         'announcements': announcements,
-        'active_announcements': list(active_tasks)
     }
     return render(request, 'announcement/list.html', context)
 

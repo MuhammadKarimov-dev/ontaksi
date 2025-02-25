@@ -1,9 +1,9 @@
 from django.contrib import admin
-from .models import Announcement, TelegramChannel, ActiveTask
+from .models import Announcement, TelegramChannel
 
 @admin.register(Announcement)
 class AnnouncementAdmin(admin.ModelAdmin):
-    list_display = ('user', 'message_preview', 'interval')
+    list_display = ('user', 'message_preview', 'interval', 'is_active')
     list_filter = ('user', 'interval')
     search_fields = ('user__username', 'message')
 
@@ -17,8 +17,3 @@ class TelegramChannelAdmin(admin.ModelAdmin):
     list_filter = ('is_active',)
     search_fields = ('channel_name', 'channel_id')
 
-@admin.register(ActiveTask)
-class ActiveTaskAdmin(admin.ModelAdmin):
-    list_display = ('announcement', 'is_active', 'created_at')
-    list_filter = ('is_active', 'created_at')
-    search_fields = ('announcement__message',)

@@ -23,12 +23,12 @@
                             📢 Эълон #{{ announcement.id }}
                         </h5>
                         <span class="badge rounded-pill px-3 py-2 
-                            {% if announcement.id in active_announcements %}
+                            {% if announcement.is_active %}
                                 bg-success text-white
                             {% else %}
                                 bg-secondary text-white
                             {% endif %}">
-                            {% if announcement.id in active_announcements %}
+                            {% if announcement.is_active %}
                                 Фаол
                             {% else %}
                                 Тўхтатилган
@@ -42,7 +42,7 @@
                     </div>
 
                     <div class="d-grid gap-2">
-                        {% if announcement.id in active_announcements %}
+                        {% if announcement.is_active %}
                         <a href="{% url 'stop_announcement' announcement.id %}"
                             class="btn btn-warning btn-sm">
                             ⏸ Тўхтатиш
