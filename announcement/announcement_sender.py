@@ -30,14 +30,14 @@ def send_messages(announcement_id):
                 
                 for channel in channels:
                     try:
-                        logger.info(f"Channel {channel.channel_id} ga xabar yuborilmoqda")
+                        logger.info(f"Xabar yuborilmoqda: {channel.channel_id}")
                         success = bot.send_message_sync(channel.channel_id, announcement.message)
                         if success:
-                            logger.info(f"Xabar muvaffaqiyatli yuborildi: {channel.channel_id}")
+                            logger.info(f"Xabar yuborildi: {channel.channel_id}")
                         else:
-                            logger.error(f"Xabar yuborish muvaffaqiyatsiz: {channel.channel_id}")
+                            logger.warning(f"Xabar yuborilmadi: {channel.channel_id}")
                     except Exception as e:
-                        logger.error(f"Xabar yuborishda xatolik ({channel.channel_id}): {str(e)}")
+                        logger.error(f"Xatolik ({channel.channel_id}): {str(e)}")
 
                 connection.close()
                 time.sleep(announcement.interval * 60)
@@ -45,8 +45,8 @@ def send_messages(announcement_id):
             except Announcement.DoesNotExist:
                 running = False
             except Exception as e:
-                logger.error(f"E'lon tsiklida xatolik: {str(e)}")
+                logger.error(f"Tsiklda xatolik: {str(e)}")
                 time.sleep(5)
 
     except Exception as e:
-        logger.error(f"Xabar yuborishda umumiy xatolik: {str(e)}")
+        logger.error(f"Umumiy xatolik: {str(e)}")

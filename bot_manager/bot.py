@@ -19,7 +19,7 @@ class TelegramBot:
         )
         logger.info("Bot initialized")
 
-    async def send_message_async(self, chat_id, text):
+    async def _send_message(self, chat_id, text):
         """Asinxron xabar yuborish"""
         async with self.app:
             if isinstance(chat_id, str) and chat_id.startswith('@'):
@@ -29,10 +29,19 @@ class TelegramBot:
     def send_message_sync(self, chat_id, text):
         """Sinxron xabar yuborish"""
         try:
-            logger.info(f"Sending message to {chat_id}")
-            asyncio.run(self.send_message_async(chat_id, text))
-            logger.info("Message sent successfully")
+            logger.info(f"Xabar yuborilmoqda: {chat_id}")
+            
+            # Yangi event loop yaratish
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            
+            # Xabarni yuborish
+            loop.run_until_complete(self._send_message(chat_id, text))
+            logger.info("Xabar muvaffaqiyatli yuborildi")
             return True
         except Exception as e:
             logger.error(f"Xabar yuborishda xatolik: {str(e)}")
             return False
+        finally:
+            # Loopni to'g'ri yopish
+            loop.close()
