@@ -29,12 +29,23 @@ class TelegramBot:
                 api_hash="1b56557db16cca997768fe87a724e75b",
                 no_updates=True
             )
-            self.app.start()
             self._initialized = True
-            logger.info("Bot initialized and started")
+            logger.info("Bot initialized")
         except Exception as e:
             logger.error(f"Error initializing bot: {str(e)}")
             raise e
+    
+    def start(self):
+        try:
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            loop.run_until_complete(self.app.start())
+            logger.info("Bot started successfully")
+        except Exception as e:
+            logger.error(f"Error starting bot: {str(e)}")
+            raise e
+        finally:
+            loop.close()
     
     def send_message_sync(self, chat_id, text):
         try:

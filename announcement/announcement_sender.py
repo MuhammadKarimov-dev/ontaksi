@@ -16,6 +16,7 @@ def send_messages(announcement_id):
     """Berilgan e'lonni Telegramga yuborish"""
     try:
         bot = TelegramBot()
+        bot.start()  # Botni ishga tushiramiz
         running = True
         
         while running:
