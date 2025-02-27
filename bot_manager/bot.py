@@ -1,6 +1,8 @@
 from pyrogram import Client
-import asyncio
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 class TelegramBot:
     def __init__(self):
@@ -10,8 +12,8 @@ class TelegramBot:
             
         self.app = Client(
             f"{session_path}/user_taxi",
-            api_id=27075572,  # Yangi API ID
-            api_hash="1b56557db16cca997768fe87a724e75b",  # Yangi API HASH
+            api_id=27075572,
+            api_hash="1b56557db16cca997768fe87a724e75b",
             no_updates=True
         )
         self._started = False
@@ -21,18 +23,23 @@ class TelegramBot:
             try:
                 self.app.start()
                 self._started = True
-                print("Bot started successfully")
+                logger.info("Bot started successfully")
             except Exception as e:
-                print(f"Start error: {str(e)}")
+                logger.error(f"Start error: {str(e)}")
                 raise e
     
     def send_message_sync(self, chat_id, text):
         try:
             self._ensure_started()
-            print(f"Sending message to {chat_id}: {text}")
+            logger.info(f"Sending message to {chat_id}: {text}")
+            
+            # Agar chat_id @ bilan boshlansa, uni olib tashlaymiz
+            if isinstance(chat_id, str) and chat_id.startswith('@'):
+                chat_id = chat_id[1:]
+                
             self.app.send_message(chat_id, text)
-            print("Message sent successfully")
+            logger.info("Message sent successfully")
             return True
         except Exception as e:
-            print(f"Send message error: {str(e)}")
+            logger.error(f"Send message error: {str(e)}")
             return False
