@@ -16,7 +16,7 @@ def send_messages(announcement_id):
     """Berilgan e'lonni Telegramga yuborish"""
     try:
         bot = TelegramBot()
-        bot.start()  # Botni ishga tushiramiz
+        bot.start()
         running = True
         
         while running:
@@ -51,3 +51,7 @@ def send_messages(announcement_id):
 
     except Exception as e:
         logger.error(f"Error in send_messages: {str(e)}")
+    finally:
+        # Loopni to'g'ri yopish
+        if hasattr(bot, 'loop'):
+            bot.loop.close()

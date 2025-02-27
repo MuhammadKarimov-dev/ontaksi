@@ -37,6 +37,7 @@ class TelegramBot:
     
     def start(self):
         try:
+            # Har bir thread uchun yangi event loop yaratish
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             loop.run_until_complete(self.app.start())
@@ -49,18 +50,18 @@ class TelegramBot:
         try:
             logger.info(f"Sending message to {chat_id}: {text}")
             
-            # Agar chat_id @ bilan boshlansa, uni olib tashlaymiz
             if isinstance(chat_id, str) and chat_id.startswith('@'):
                 chat_id = chat_id[1:]
                 
-            # Yangi event loop yaratamiz
+            # Har bir thread uchun yangi event loop yaratish
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
             
-            # Xabar yuborish
             loop.run_until_complete(self.app.send_message(chat_id, text))
             logger.info("Message sent successfully")
             return True
         except Exception as e:
             logger.error(f"Send message error: {str(e)}")
             return False
+        finally:
+            loop.close()
