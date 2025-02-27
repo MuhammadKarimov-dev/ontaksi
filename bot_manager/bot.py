@@ -37,15 +37,15 @@ class TelegramBot:
     
     def start(self):
         try:
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
+            loop = asyncio.get_event_loop()
+            if loop.is_closed():
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
             loop.run_until_complete(self.app.start())
             logger.info("Bot started successfully")
         except Exception as e:
             logger.error(f"Error starting bot: {str(e)}")
             raise e
-        finally:
-            loop.close()
     
     def send_message_sync(self, chat_id, text):
         try:
@@ -56,8 +56,10 @@ class TelegramBot:
                 chat_id = chat_id[1:]
                 
             # Yangi event loop yaratamiz
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
+            loop = asyncio.get_event_loop()
+            if loop.is_closed():
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
             
             # Xabar yuborish
             loop.run_until_complete(self.app.send_message(chat_id, text))
@@ -66,5 +68,3 @@ class TelegramBot:
         except Exception as e:
             logger.error(f"Send message error: {str(e)}")
             return False
-        finally:
-            loop.close()
