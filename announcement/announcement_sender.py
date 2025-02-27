@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 def send_messages(announcement_id):
     """Berilgan e'lonni Telegramga yuborish"""
     try:
-        bot = TelegramBot()
+        bot = TelegramBot()  # Singleton instance
         running = True
         
         while running:
