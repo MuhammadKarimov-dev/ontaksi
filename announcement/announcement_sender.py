@@ -14,10 +14,8 @@ logger = logging.getLogger(__name__)
 
 def send_messages(announcement_id):
     """Berilgan e'lonni Telegramga yuborish"""
-    bot = None  # Botni dastlab None deb e'lon qilamiz
     try:
         bot = TelegramBot()
-        bot.start()
         running = True
         
         while running:
@@ -32,14 +30,14 @@ def send_messages(announcement_id):
                 
                 for channel in channels:
                     try:
-                        logger.info(f"Sending message to channel {channel.channel_id}")
+                        logger.info(f"Channel {channel.channel_id} ga xabar yuborilmoqda")
                         success = bot.send_message_sync(channel.channel_id, announcement.message)
                         if success:
-                            logger.info(f"Message sent successfully to {channel.channel_id}")
+                            logger.info(f"Xabar muvaffaqiyatli yuborildi: {channel.channel_id}")
                         else:
-                            logger.error(f"Failed to send message to {channel.channel_id}")
+                            logger.error(f"Xabar yuborish muvaffaqiyatsiz: {channel.channel_id}")
                     except Exception as e:
-                        logger.error(f"Error sending message to {channel.channel_id}: {str(e)}")
+                        logger.error(f"Xabar yuborishda xatolik ({channel.channel_id}): {str(e)}")
 
                 connection.close()
                 time.sleep(announcement.interval * 60)
@@ -47,12 +45,8 @@ def send_messages(announcement_id):
             except Announcement.DoesNotExist:
                 running = False
             except Exception as e:
-                logger.error(f"Error in announcement loop: {str(e)}")
+                logger.error(f"E'lon tsiklida xatolik: {str(e)}")
                 time.sleep(5)
 
     except Exception as e:
-        logger.error(f"Error in send_messages: {str(e)}")
-    finally:
-        # Loopni to'g'ri yopish
-        if bot and hasattr(bot, 'loop'):
-            bot.loop.close()
+        logger.error(f"Xabar yuborishda umumiy xatolik: {str(e)}")
