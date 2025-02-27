@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-@i)!+(41weo9jc21w&r3959^0$d)bytq4+8_r40!-7b2jh0$wj
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', '81.200.146.99', 'ontaksi.uz']
 
 
 # Application definition
@@ -116,7 +116,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_TRUSTED_ORIGINS = [
     "https://*",  # Barcha HTTPS domenlar uchun
     "http://*",    # Ngrok domeningizni shu yerga qo'shing
-    'https://*.ngrok-free.app'
+    'https://*.ngrok-free.app',
+    'http://81.200.146.99',  # Yangi IP qo'shildi
+    'http://ontaksi.uz',    # Yangi domen qo'shildi
 ]
 import os
 
