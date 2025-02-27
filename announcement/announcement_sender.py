@@ -14,6 +14,7 @@ logger = logging.getLogger(__name__)
 
 def send_messages(announcement_id):
     """Berilgan e'lonni Telegramga yuborish"""
+    bot = None  # Botni dastlab None deb e'lon qilamiz
     try:
         bot = TelegramBot()
         bot.start()
@@ -53,5 +54,5 @@ def send_messages(announcement_id):
         logger.error(f"Error in send_messages: {str(e)}")
     finally:
         # Loopni to'g'ri yopish
-        if hasattr(bot, 'loop'):
+        if bot and hasattr(bot, 'loop'):
             bot.loop.close()

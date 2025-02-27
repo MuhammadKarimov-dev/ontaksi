@@ -22,30 +22,31 @@ class TelegramBot:
         if not os.path.exists(session_path):
             os.makedirs(session_path)
             
-        try:
-            self.app = Client(
-                f"{session_path}/user_taxi",
-                api_id=27075572,
-                api_hash="1b56557db16cca997768fe87a724e75b",
-                no_updates=True
-            )
-            self._initialized = True
-            logger.info("Bot initialized")
-        except Exception as e:
-            logger.error(f"Error initializing bot: {str(e)}")
-            raise e
+        self.app = Client(
+            f"{session_path}/user_taxi",
+            api_id=27075572,
+            api_hash="1b56557db16cca997768fe87a724e75b",
+            no_updates=True
+        )
+        self.loop = None  # Event loopni saqlash uchun atribut
+        logger.info("Bot initialized")
     
+    async def _async_start(self):
+        await self.app.start()
+
     def start(self):
         try:
-            # Har bir thread uchun yangi event loop yaratish
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            loop.run_until_complete(self.app.start())
+            self.loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(self.loop)
+            self.loop.run_until_complete(self._async_start())
             logger.info("Bot started successfully")
         except Exception as e:
             logger.error(f"Error starting bot: {str(e)}")
             raise e
     
+    async def _async_send_message(self, chat_id, text):
+        await self.app.send_message(chat_id, text)
+
     def send_message_sync(self, chat_id, text):
         try:
             logger.info(f"Sending message to {chat_id}: {text}")
@@ -53,15 +54,9 @@ class TelegramBot:
             if isinstance(chat_id, str) and chat_id.startswith('@'):
                 chat_id = chat_id[1:]
                 
-            # Har bir thread uchun yangi event loop yaratish
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            
-            loop.run_until_complete(self.app.send_message(chat_id, text))
+            asyncio.run(self._async_send_message(chat_id, text))
             logger.info("Message sent successfully")
             return True
         except Exception as e:
             logger.error(f"Send message error: {str(e)}")
             return False
-        finally:
-            loop.close()
