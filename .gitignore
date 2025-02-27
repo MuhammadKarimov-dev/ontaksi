@@ -5,3 +5,5 @@ user_taxi.session
 db.sqlite3
 debug.log
 user_taxi.session
+db.sqlite3
+debug.log
