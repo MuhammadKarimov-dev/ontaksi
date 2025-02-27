@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}📢 Каналлар{% endblock %}
+{% block title %}📢 Channels{% endblock %}
 
 {% block content %}
 <div class="container py-4">
@@ -8,68 +8,45 @@
         <div class="col-12">
 
             <div class="d-flex justify-content-between align-items-center mb-4">
-                <h2 class="page-title">📢 Каналлар</h2>
-                <a href="{% url 'add_channel' %}" class="btn btn-primary">
-                    <i class="bi bi-plus-lg"></i> Янги канал
+                <h2 class="page-title">
+                    <i class="bi bi-broadcast me-2"></i>
+                    <span class="title-text">Kanallar</span>
+                </h2>
+                <a href="{% url 'add_channel' %}" class="btn btn-primary add-channel-btn">
+                    <i class="bi bi-plus-lg"></i>
+                    <span class="btn-text">Yangi kanal</span>
                 </a>
             </div>
 
-            <!-- 📌 Modal oynasi (Mobil uchun) -->
-            <div class="modal fade" id="channelModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">📢 Канал маълумотлари</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                        </div>
-                        <div class="modal-body">
-                            <p><strong>Канал номи:</strong> <span id="modalChannelName"></span></p>
-                            <p><strong>ID:</strong> <span id="modalChannelId"></span></p>
-                            <p><strong>Ҳолати:</strong> <span id="modalChannelStatus"></span></p>
-                            <div id="modalChannelActions" class="btn-group"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 📌 Kanallar jadvali -->
+            <!-- 📌 Channels Table -->
             <div class="card shadow">
                 <div class="card-body p-0">
                     <div class="table-responsive">
-                        <table class="table table-bordered table-hover">
-                            <thead class="table-light">
+                        <table class="table">
+                            <thead>
                                 <tr>
-                                    <th style="width: 5%;">№</th>
-                                    <th>Канал</th>
+                                    <th>№</th>
+                                    <th>Kanal</th>
                                     <th>ID</th>
-                                    <th>Ҳолати</th>
-                                    <th>Амаллар</th>
+                                    <th>Status</th>
+                                    <th>Amallar</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for channel in channels %}
-                                <tr>
+                                <tr class="channel-row" data-bs-toggle="modal" data-bs-target="#channelModal" data-id="{{ channel.id }}" data-name="{{ channel.channel_name }}" data-status="{{ channel.is_active }}">
                                     <td>{{ forloop.counter }}</td>
                                     <td>
-                                        <a href="#" class="channel-link" data-bs-toggle="modal"
-                                            data-bs-target="#channelModal" data-name="{{ channel.channel_name }}"
-                                            data-id="{{ channel.channel_id }}"
-                                            data-status="{% if channel.is_active %}✅ Faol{% else %}❌ Faol emas{% endif %}"
-                                            data-toggle-url="{% url 'toggle_channel' channel.id %}"
-                                            data-delete-url="{% url 'delete_channel' channel.id %}"
-                                            data-is-active="{{ channel.is_active }}">
-                                            {{ channel.channel_name }}
-                                        </a>
+                                        <span class="channel-name">{{ channel.channel_name }}</span>
                                     </td>
                                     <td>{{ channel.channel_id }}</td>
                                     <td>
-                                        <span
-                                            class="badge {% if channel.is_active %}bg-success{% else %}bg-secondary{% endif %}">
-                                            {% if channel.is_active %}✅{% else %}❌{% endif %}
+                                        <span class="badge {% if channel.is_active %}bg-success{% else %}bg-danger{% endif %}">
+                                            {% if channel.is_active %}Faol{% else %}O'chirilgan{% endif %}
                                         </span>
                                     </td>
                                     <td>
-                                        <div class="btn-group">
+                                        <div class="btn-group" onclick="event.stopPropagation();">
                                             <a href="{% url 'toggle_channel' channel.id %}"
                                                 class="btn btn-sm {% if channel.is_active %}btn-warning{% else %}btn-success{% endif %}">
                                                 {% if channel.is_active %}
@@ -80,7 +57,7 @@
                                             </a>
                                             <a href="{% url 'delete_channel' channel.id %}"
                                                 class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Ростдан ҳам бу канални ўчирмоқчимисиз?')">
+                                                onclick="return confirm('Are you sure you want to delete this channel?')">
                                                 <i class="bi bi-trash"></i>
                                             </a>
                                         </div>
@@ -89,7 +66,7 @@
                                 {% empty %}
                                 <tr>
                                     <td colspan="5" class="text-center py-4">
-                                        <p class="text-muted mb-0">🚀 Ҳозирча каналлар йўқ</p>
+                                        <p class="text-muted mb-0">🚀 No channels yet</p>
                                     </td>
                                 </tr>
                                 {% endfor %}
@@ -103,13 +80,45 @@
     </div>
 </div>
 
-<!-- 📌 JavaScript (Modal oynasi uchun) -->
+<!-- Umumiy modal -->
+<div class="modal fade" id="channelModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Kanal ma'lumotlari</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="channel-info">
+                    <div class="channel-info-label">Kanal nomi:</div>
+                    <div class="channel-info-value" id="modalChannelName"></div>
+                </div>
+                <div class="channel-info">
+                    <div class="channel-info-label">Kanal ID:</div>
+                    <div class="channel-info-value" id="modalChannelId"></div>
+                </div>
+                <div class="channel-info">
+                    <div class="channel-info-label">Status:</div>
+                    <div class="channel-info-value" id="modalChannelStatus"></div>
+                </div>
+                <!-- 400px dan kichik ekranlarda ko'rinadigan action buttonlar -->
+                <div class="channel-actions d-sm-none">
+                    <div class="btn-group w-100" id="modalChannelActions"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Yopish</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        let channelLinks = document.querySelectorAll(".channel-link");
+        let channelRows = document.querySelectorAll(".channel-row");
 
-        channelLinks.forEach(link => {
-            link.addEventListener("click", function () {
+        channelRows.forEach(row => {
+            row.addEventListener("click", function () {
                 let modalChannelName = document.getElementById("modalChannelName");
                 let modalChannelId = document.getElementById("modalChannelId");
                 let modalChannelStatus = document.getElementById("modalChannelStatus");
@@ -117,24 +126,20 @@
 
                 let name = this.getAttribute("data-name");
                 let id = this.getAttribute("data-id");
-                let status = this.getAttribute("data-status");
-                let toggleUrl = this.getAttribute("data-toggle-url");
-                let deleteUrl = this.getAttribute("data-delete-url");
-                let isActive = this.getAttribute("data-is-active") === "True";
+                let isActive = this.getAttribute("data-status") === "True";
 
                 modalChannelName.textContent = name;
                 modalChannelId.textContent = id;
-                modalChannelStatus.textContent = status;
+                modalChannelStatus.innerHTML = `<span class="badge ${isActive ? 'bg-success' : 'bg-danger'}">${isActive ? 'Faol' : "O'chirilgan"}</span>`;
 
                 modalChannelActions.innerHTML = `
-                <a href="${toggleUrl}" class="btn btn-sm ${isActive ? "btn-warning" : "btn-success"}">
-                    ${isActive ? '<i class="bi bi-pause-fill"></i> To‘xtatish' : '<i class="bi bi-play-fill"></i> Faollashtirish'}
-                </a>
-                <a href="${deleteUrl}" class="btn btn-sm btn-danger"
-                   onclick="return confirm('Ростдан ҳам бу канални ўчирмоқчимисиз?')">
-                    <i class="bi bi-trash"></i> Ўчириш
-                </a>
-            `;
+                    <a href="{% url 'toggle_channel' '' %}${id}" class="btn ${isActive ? 'btn-warning' : 'btn-success'}">
+                        ${isActive ? '<i class="bi bi-pause-fill"></i> To\'xtatish' : '<i class="bi bi-play-fill"></i> Faollashtirish'}
+                    </a>
+                    <a href="{% url 'delete_channel' '' %}${id}" class="btn btn-danger" onclick="return confirm('Kanalni o\'chirmoqchimisiz?')">
+                        <i class="bi bi-trash"></i> O'chirish
+                    </a>
+                `;
             });
         });
     });

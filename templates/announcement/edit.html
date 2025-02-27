@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Эълонни таҳрирлаш{% endblock %}
+{% block title %}Edit Announcement{% endblock %}
 
 {% block content %}
 <div class="container">
@@ -8,27 +8,27 @@
         <div class="col-12 col-md-10 col-lg-8">
             <div class="card border-0 shadow-sm">
                 <div class="card-header py-3 text-center" style="background-color: var(--primary-color); color: black; font-weight: bold;">
-                    <h3 class="mb-0 fs-4">Эълонни таҳрирлаш</h3>
+                    <h3 class="mb-0 fs-4">Edit Announcement</h3>
                 </div>
                 <div class="card-body p-4">
                     <form method="post">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Эълон матни</label>
+                            <label class="form-label fw-bold">Announcement Text</label>
                             <textarea name="message" class="form-control form-control-lg" rows="5" 
-                                required placeholder="Эълон матнини киритинг...">{{ announcement.message }}</textarea>
+                                required placeholder="Enter announcement text...">{{ announcement.message }}</textarea>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Такрорлаш интервали (дақиқада)</label>
+                            <label class="form-label fw-bold">Repeat Interval (minutes)</label>
                             <input name="interval" type="number" class="form-control form-control-lg" min="1"
-                                value="{{ announcement.interval }}" required placeholder="Масалан: 5 дақиқа" />
+                                value="{{ announcement.interval }}" required placeholder="e.g., 5 minutes" />
                         </div>
                         <div class="d-grid gap-3 mt-4">
                             <button type="submit" class="btn btn-success btn-lg w-100">
-                                <i class="bi bi-check2-circle"></i> Сақлаш
+                                <i class="bi bi-check2-circle"></i> Save
                             </button>
                             <a href="{% url 'announcement_list' %}" class="btn btn-secondary btn-lg w-100">
-                                <i class="bi bi-x-circle"></i> Бекор қилиш
+                                <i class="bi bi-x-circle"></i> Cancel
                             </a>
                         </div>
                     </form>

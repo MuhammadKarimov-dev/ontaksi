@@ -5,6 +5,10 @@ from .models import Announcement, TelegramChannel
 from django.contrib import messages 
 import threading
 from announcement.announcement_sender import send_messages
+from bot_manager.telegram_bot import TelegramBot
+import logging
+
+logger = logging.getLogger(__name__)
 
 def home(request):
     announcements = Announcement.objects.all().order_by('-id')[:10]
@@ -27,23 +31,34 @@ def logout_view(request):
 
 @login_required
 def start_announcement(request, announcement_id):
-    announcement = get_object_or_404(Announcement, id=announcement_id)
-    if announcement.user==request.user:
-        announcement.is_active = True
-        announcement.save()
-        thread = threading.Thread(target=send_messages, args=(announcement_id,), daemon=True)
-        thread.start()
-    else:
-        messages.error(request, 'Ushbu e’lonni faqat elon yaratgan foydalanuvchi ozgartira oladi!')
-
-    return redirect("announcement_list")  # E’lonlar sahifasiga qaytarish
+    try:
+        announcement = get_object_or_404(Announcement, id=announcement_id)
+        if announcement.user == request.user:
+            announcement.is_active = True
+            announcement.save()
+            
+            thread = threading.Thread(target=send_messages, args=(announcement_id,), daemon=True)
+            thread.start()
+            
+            messages.success(request, "E'lon yuborish boshlandi")
+        else:
+            messages.error(request, "Sizda bunday huquq yo'q!")
+            
+    except Exception as e:
+        logger.error(f"Start announcement error: {str(e)}")
+        messages.error(request, "Xatolik yuz berdi")
+    
+    return redirect("announcement_list")
 
 @login_required
 def stop_announcement(request, announcement_id):
-    announcement = get_object_or_404(Announcement, id=announcement_id)
-    announcement.is_active = False
-    announcement.save()
-    
+    try:
+        announcement = get_object_or_404(Announcement, id=announcement_id)
+        announcement.is_active = False
+        announcement.save()
+        messages.info(request, "E'lon to'xtatildi")
+    except Exception as e:
+        messages.error(request, "Xatolik yuz berdi")
     return redirect("announcement_list")
 
 @login_required
@@ -56,12 +71,25 @@ def delete_announcement(request, announcement_id):
 @login_required
 def create_announcement(request):
     if request.method == 'POST':
-        Announcement.objects.create(
-            user=request.user,
-            message=request.POST.get('message'),
-            interval=int(request.POST.get('interval', 5))
-        )
-        return redirect('announcement_list')
+        try:
+            message = request.POST.get('message')
+            interval = int(request.POST.get('interval', 5))
+            
+            # Faqat e'lonni yaratamiz, yubormaymiz
+            announcement = Announcement.objects.create(
+                user=request.user,
+                message=message,
+                interval=interval,
+                is_active=False  # Boshlash tugmasi bosilmaguncha faol emas
+            )
+
+            messages.success(request, "E'lon muvaffaqiyatli yaratildi. Yuborishni boshlash uchun 'Boshlash' tugmasini bosing.")
+            return redirect('announcement_list')
+
+        except Exception as e:
+            messages.error(request, f"Xatolik yuz berdi: {e}")
+            return redirect('create_announcement')
+
     return render(request, 'announcement/create.html')
 
 @login_required

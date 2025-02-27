@@ -1,11 +1,14 @@
 <div class="mobile-bottom-nav d-lg-none">
     <a href="{% url 'create_announcement' %}" class="bottom-nav-link {% if request.resolver_match.url_name == 'create_announcement' %}active{% endif %}">
-        <i class="bi bi-plus-circle"></i> <br> E’lon berish
+        <i class="bi bi-plus-circle-fill"></i>
+        <span>E'lon</span>
     </a>
     <a href="{% url 'announcement_list' %}" class="bottom-nav-link {% if request.resolver_match.url_name == 'announcement_list' %}active{% endif %}">
-        <i class="bi bi-megaphone"></i> <br> E’lonlar
+        <i class="bi bi-megaphone-fill"></i>
+        <span>E'lonlar</span>
     </a>
     <a href="{% url 'channel_list' %}" class="bottom-nav-link {% if request.resolver_match.url_name == 'channel_list' %}active{% endif %}">
-        <i class="bi bi-broadcast"></i> <br> Kanallar
+        <i class="bi bi-broadcast"></i>
+        <span>Kanallar</span>
     </a>
 </div>

@@ -1,16 +1,24 @@
 <nav class="navbar navbar-expand-lg">
-    <div class="container">
+    <div class="nav_container">
         <a class="navbar-brand fw-bold text-dark" href="/">Codefy</a>
 
-        <!-- Mobil versiyada faqat Kirish yoki Chiqish tugmasi ko'rinadi -->
+        <!-- Theme switcher -->
+        <div class="theme-switch">
+            <label class="switch">
+                <input type="checkbox">
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        <!-- Mobile version only shows Login or Logout button -->
         <div class="d-lg-none">
             {% if user.is_authenticated %}
                 <a class="nav-link logout-link" href="{% url 'logout' %}">
-                    <i class="bi bi-box-arrow-right"></i> Chiqish
+                    <i class="bi bi-box-arrow-right"></i> Logout
                 </a>
             {% else %}
                 <a class="nav-link login-link" href="{% url 'login' %}">
-                    <i class="bi bi-person"></i> Kirish
+                    <i class="bi bi-person"></i> Login
                 </a>
             {% endif %}
         </div>
@@ -20,28 +28,28 @@
                 {% if user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'create_announcement' %}">
-                            <i class="bi bi-plus-circle"></i> E’lon berish
+                            <i class="bi bi-plus-circle"></i> Add Announcement
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'announcement_list' %}">
-                            <i class="bi bi-megaphone"></i> Mening E’lonlarim
+                            <i class="bi bi-megaphone"></i> My Announcements
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'channel_list' %}">
-                            <i class="bi bi-broadcast"></i> Kanallar
+                            <i class="bi bi-broadcast"></i> Channels
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link logout-link" href="{% url 'logout' %}">
-                            <i class="bi bi-box-arrow-right"></i> Chiqish
+                            <i class="bi bi-box-arrow-right"></i> Logout
                         </a>
                     </li>
                 {% else %}
                     <li class="nav-item">
                         <a class="nav-link login-link" href="{% url 'login' %}">
-                            <i class="bi bi-person"></i> Kirish
+                            <i class="bi bi-person"></i> Login
                         </a>
                     </li>
                 {% endif %}

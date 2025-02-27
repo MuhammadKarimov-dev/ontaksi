@@ -1,9 +1,20 @@
 from pyrogram import Client
 import asyncio
+import logging
+import traceback
+
 try:
     from bot_manager.bot_config import api_id, api_hash
-except :
+except:
     from bot_config import api_id, api_hash
+
+# Logging ni sozlash
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s [%(levelname)s] %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logger = logging.getLogger(__name__)
 
 class TelegramBot:
     _instance = None
@@ -25,11 +36,14 @@ class TelegramBot:
             self._initialized = True
             self._is_connected = False
             self._lock = asyncio.Lock()
+            # Har bir instance uchun yangi event loop yaratish
             self._loop = asyncio.new_event_loop()
             asyncio.set_event_loop(self._loop)
 
     def __del__(self):
+        """Event loopni to'g'ri yopish"""
         if hasattr(self, '_loop') and self._loop.is_running():
+            self._loop.run_until_complete(self.disconnect())
             self._loop.close()
 
     async def connect(self):
@@ -54,16 +68,17 @@ class TelegramBot:
             await self._app.send_message(channel_id, message)
             return True
         except Exception as e:
-            print(f"Xabar yuborishda xatolik: {e}")
+            logger.error(f"Xabar yuborishda xatolik: {e}")
+            logger.debug(traceback.format_exc())
             return False
 
     def send_message_sync(self, channel_id, message):
         """Sinxron xabar yuborish"""
         try:
             return self._loop.run_until_complete(self.send_message(channel_id, message))
-            print("YUBORILDI")
         except Exception as e:
-            print(f"Xabar yuborishda xatolik: {e}")
+            logger.error(f"Xabar yuborishda xatolik: {e}")
+            logger.debug(traceback.format_exc())
             return False
 
 # t=TelegramBot()

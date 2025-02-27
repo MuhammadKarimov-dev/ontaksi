@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Янги канал қўшиш{% endblock %}
+{% block title %}Add New Channel{% endblock %}
 
 {% block content %}
 <div class="container py-4">
@@ -8,26 +8,26 @@
         <div class="col-12 col-md-8 col-lg-6">
             <div class="card border-0 shadow-sm">
                 <div class="card-header py-3" style="background-color: var(--primary-color); color: black; font-weight: bold;">
-                    <h3 class="mb-0 fs-4 text-center">Янги канал қўшиш</h3>
+                    <h3 class="mb-0 fs-4 text-center">Add New Channel</h3>
                 </div>
                 <div class="card-body p-4">
                     <form method="post">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Канал номи</label>
+                            <label class="form-label fw-bold">Channel Name</label>
                             <input type="text" name="name" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-bold">Канал ID</label>
+                            <label class="form-label fw-bold">Channel ID</label>
                             <input type="text" name="channel_id" class="form-control" required>
-                            <div class="form-text">Масалан: @channel_name ёки 100123456789</div>
+                            <div class="form-text">e.g., @channel_name or 100123456789</div>
                         </div>
                         <div class="d-flex justify-content-end gap-2">
                             <button type="submit" class="btn btn-primary px-4">
-                                <i class="bi bi-plus-circle"></i> Қўшиш
+                                <i class="bi bi-plus-circle"></i> Add
                             </button>
                             <a href="{% url 'channel_list' %}" class="btn btn-secondary px-4">
-                                <i class="bi bi-x-circle"></i> Бекор қилиш
+                                <i class="bi bi-x-circle"></i> Cancel
                             </a>
                         </div>
                     </form>
