@@ -1,8 +1,11 @@
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+load_dotenv()
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -25,7 +28,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'announcement',
+    'announcement.apps.AnnouncementConfig',
+    'bot_manager.apps.BotManagerConfig',
+    'users',  # mavjud bo'lsa
     'corsheaders',
 ]
 
@@ -122,8 +127,6 @@ CSRF_TRUSTED_ORIGINS = [
     'http://81.200.146.99',  # Yangi IP qo'shildi
     'http://ontaksi.uz',    # Yangi domen qo'shildi
 ]
-import os
-
 
 STATIC_URL = '/static/'  # Static URL yo'li
 
@@ -137,7 +140,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 LOGIN_URL = 'login'  # login_view funksiyasining name'i
-LOGIN_REDIRECT_URL = 'home' 
+LOGIN_REDIRECT_URL = 'dashboard' 
 
 # Thread va Memory settings
 MAX_WORKER_THREADS = 10
@@ -184,3 +187,21 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
 
 SECURE_CROSS_ORIGIN_OPENER_POLICY = None 
+
+AUTH_USER_MODEL = 'announcement.CustomUser' 
+
+# Telegram API sozlamalari
+TELEGRAM_API_ID = os.getenv('TELEGRAM_API_ID')
+TELEGRAM_API_HASH = os.getenv('TELEGRAM_API_HASH')
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN') 
+
+# SMS sozlamalari
+SMS_API_URL = os.getenv('SMS_API_URL', 'https://api.sms.provider.com/send')
+SMS_API_KEY = os.getenv('SMS_API_KEY') 
+
+# Eskiz.uz sozlamalari
+ESKIZ_EMAIL = os.getenv('ESKIZ_EMAIL')
+ESKIZ_PASSWORD = os.getenv('ESKIZ_PASSWORD') 
+
+# Telegram kanal ID
+TELEGRAM_CHANNEL_ID = os.getenv('TELEGRAM_CHANNEL_ID') 

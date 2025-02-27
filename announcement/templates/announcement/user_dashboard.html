@@ -1,0 +1,37 @@
+{% extends 'announcement/base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Mening Xabarlarim</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sana</th>
+                    <th>Xabar</th>
+                    <th>Yuborish turi</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for message in messages %}
+                <tr>
+                    <td>{{ message.created_at }}</td>
+                    <td>{{ message.text }}</td>
+                    <td>{{ message.get_sent_via_display }}</td>
+                    <td>
+                        {% if message.status == 'sent' %}
+                            <span class="badge bg-success">Yuborildi</span>
+                        {% elif message.status == 'failed' %}
+                            <span class="badge bg-danger">Xatolik</span>
+                        {% else %}
+                            <span class="badge bg-warning">Kutilmoqda</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %} 

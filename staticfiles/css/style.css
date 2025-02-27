@@ -1,202 +1,1642 @@
-/* === Root Colors === */
+/* === Asosiy ranglar === */
 :root {
-    --primary-color: #ffd700; /* Sariq */
-    --dark-color: #000000; /* Qora */
-    --light-gray: #f8f9fa; /* Yengil kulrang */
-  }
-  
-  /* === Navbar === */
+  --primary-color: #ffd700; /* Sariq */
+  --dark-color: #000000; /* Qora */
+  --light-gray: #f8f9fa; /* Yengil kulrang */
+  --text-color: #000000; /* Matn rangi */
+  --background-color: #ffffff; /* Orqa fon rangi */
+  --card-background: #ffffff; /* Karta orqa foni */
+  --navbar-background: var(--primary-color); /* Navbar orqa foni */
+  --navbar-text: #000000; /* Navbar matni */
+  --footer-text: #000000; /* Footer matni */
+}
+
+.dark-mode {
+  --primary-color: #ffd700;
+  --dark-color: #000000;
+  --light-gray: #2d2d2d;
+  --text-color: #ffffff;
+  --background-color: #000000; /* Tim qora fon */
+  --card-background: #1a1a1a; /* Kartalar uchun ochroq rang */
+  --card-hover: #242424; /* Hover uchun yanada ochroq rang */
+  --navbar-background: #000000;
+  --navbar-text: #ffffff;
+  --footer-text: #ffffff;
+}
+
+/* === Body va Main === */
+body, 
+main {
+  background-color: var(--background-color) !important;
+  color: var(--text-color);
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Body class ni o'chirib tashlash */
+body.bg-light {
+  background-color: var(--background-color) !important;
+}
+
+/* Dark mode uchun */
+.dark-mode body,
+.dark-mode body.bg-light {
+  background-color: var(--background-color) !important;
+}
+
+/* === Navbar === */
+.navbar {
+  background-color: var(--primary-color) !important;
+  padding: 10px 0;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.nav_container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.navbar-brand {
+  color: var(--dark-color) !important;
+  font-weight: bold;
+  font-size: 1.4rem;
+}
+
+.navbar-nav {
+  display: flex;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navbar-nav .nav-link {
+  font-weight: bold;
+  color: var(--dark-color) !important;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  transition: 0.3s;
+}
+
+.navbar-nav .nav-link:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode uchun */
+.dark-mode .navbar {
+  background-color: #1a1a1a !important;
+}
+
+.dark-mode .navbar-nav .nav-link {
+  color: var(--primary-color) !important;
+}
+
+.dark-mode .navbar-nav .nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode .navbar-brand {
+  color: var(--primary-color) !important;
+}
+
+/* === Mobil Navbar === */
+@media (max-width: 991px) {
   .navbar {
-    background-color: var(--primary-color) !important;
-    padding: 10px 0;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 8px 0;
   }
   
-  .navbar-nav {
-    gap: 10px;
+  .navbar-brand {
+    font-size: 1.2rem;
   }
-  
-  .navbar-nav .nav-link {
+
+  .navbar-toggler, .navbar-collapse {
+    display: none !important;
+  }
+
+  .d-lg-none {
+    display: flex !important;
+    align-items: center;
+  }
+
+  .d-lg-none .nav-link {
+    font-size: 16px;
     font-weight: bold;
+    padding: 10px 15px;
+    background-color: black;
+    color: white !important;
+    border-radius: 5px;
+  }
+
+  .d-lg-none .nav-link:hover {
+    background-color: white;
     color: black !important;
+    border: 1px solid black;
+  }
+}
+
+/* === Mobil Footer (Pastki Menyu) === */
+.mobile-bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--dark-color);
+  display: flex;
+  justify-content: space-around;
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+  height: 60px;
+  padding: 0;
+  z-index: 1000;
+}
+
+.bottom-nav-link {
+  text-decoration: none;
+  color: #ffffff !important;
+  font-size: 14px;
+  text-align: center;
+  font-weight: bold;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  opacity: 0.7;
+  gap: 6px;
+}
+
+.bottom-nav-link i {
+  font-size: 20px;
+}
+
+.bottom-nav-link span {
+  font-size: 12px;
+  line-height: 1;
+}
+
+.bottom-nav-link.active {
+  background-color: var(--primary-color);
+  color: var(--dark-color) !important;
+  opacity: 1;
+}
+
+/* === Page title va button === */
+.page-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+.page-title i {
+  font-size: 1.8rem;
+  color: var(--dark-color); /* Light mode uchun qora rang */
+}
+
+/* Dark mode uchun */
+.dark-mode .page-title i {
+  color: var(--primary-color); /* Dark mode uchun sariq rang */
+}
+
+/* === Add channel button === */
+.add-channel-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px;
+  height: 38px;
+  margin-right: 15px;
+}
+
+.add-channel-btn i {
+  font-size: 1.2rem;
+  margin-right: 2px;
+}
+
+.add-channel-btn .btn-text {
+  margin-left: 2px;
+}
+
+/* === Tugmalar === */
+.btn-primary {
+  background-color: var(--primary-color);
+  border: none;
+  color: var(--dark-color);
+  font-weight: bold;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+}
+
+/* === Kartalar === */
+.card {
+  background-color: var(--card-background);
+  border: 1px solid var(--light-gray);
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  color: var(--text-color);
+}
+
+/* Dark mode uchun karta hover */
+.dark-mode .card:hover {
+  background-color: var(--card-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+}
+
+/* === Telefon raqam badge === */
+.phone-badge {
+  background-color: var(--primary-color);
+  color: black;
+  font-weight: bold;
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+/* === Table dizayni === */
+.table {
+  width: 100%;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 0;
+  background-color: #ffffff !important;
+  border: 1px solid #e0e0e0;
+}
+
+.table thead th {
+  color: #000000 !important;
+  font-weight: bold;
+  padding: 15px;
+  border: 1px solid #e0e0e0;
+  background-color: #f8f9fa;
+}
+
+.table tbody td {
+  padding: 12px 15px;
+  vertical-align: middle;
+  color: #000000 !important;
+  border: 1px solid #e0e0e0;
+}
+
+/* Action tugmalari */
+.btn-group {
+  display: flex;
+  gap: 5px;
+}
+
+.btn-group .btn {
+  padding: 6px 12px;
+  border-radius: 6px;
+}
+
+.btn-group .btn-sm {
+  padding: 4px 8px;
+  font-size: 14px;
+}
+
+/* Table responsive */
+@media (max-width: 992px) {
+  .table th, .table td {
+    font-size: 0.95rem;
+    padding: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .table th:nth-child(3), 
+  .table td:nth-child(3) {
+    display: none;
+  }
+
+  .table th, .table td {
+    font-size: 0.9rem;
+    padding: 8px;
+  }
+}
+
+@media (max-width: 400px) {
+  /* Action ustunini yashirish */
+  .table th:nth-child(5), 
+  .table td:nth-child(5) {
+    display: none;
+  }
+
+  /* Modal ichida action buttonlarini ko'rsatish */
+  .channel-modal .modal-body .channel-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid var(--light-gray);
+  }
+
+  .channel-modal .modal-body .btn-group {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+  }
+
+  .channel-modal .modal-body .btn {
+    flex: 1;
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+/* Dark mode table */
+.dark-mode .table {
+  background-color: #1a1a1a !important;
+  border-color: var(--light-gray);
+}
+
+.dark-mode .table thead th {
+  border-color: #2d2d2d;
+  background-color: #f0f0f0;
+}
+
+.dark-mode .table tbody td {
+  border-color: #2d2d2d;
+}
+
+/* Channel nomi */
+.channel-name {
+  font-weight: 500;
+  color: #000000 !important;
+  font-size: 1rem;
+  display: block;
+}
+
+/* Channel row */
+.channel-row {
+  cursor: pointer;
+}
+
+.channel-row:hover {
+  background-color: #f8f9fa;
+}
+
+/* Table hover */
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+
+/* Dark mode table */
+.dark-mode .table {
+  background-color: #1a1a1a !important;
+}
+
+.dark-mode .table thead {
+  background-color: var(--primary-color);
+}
+
+.dark-mode .table thead th {
+  color: #000000 !important;
+}
+
+.dark-mode .table tbody {
+  background-color: #1a1a1a;
+}
+
+.dark-mode .table tbody tr {
+  background-color: #1a1a1a;
+  border-color: #333;
+}
+
+.dark-mode .table tbody tr:hover {
+  background-color: #2c2c2c;
+}
+
+.dark-mode .table tbody td {
+  color: #ffffff;
+}
+
+.dark-mode .channel-name {
+  color: #000000 !important;
+}
+
+.badge {
+  padding: 5px 10px;
+  font-size: 14px;
+  border-radius: 5px;
+}
+
+/* === Matnni qisqartirish === */
+.truncate-text {
+  max-width: 200px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* === Mobil uchun optimallashtirish === */
+@media (max-width: 762px) {
+  .truncate-text {
+    max-width: 140px;
+  }
+
+  .btn-group .btn {
+    font-size: 12px;
+    padding: 3px 6px;
+  }
+
+  /* "Status" ustuni mobilda ham ko'rinsin */
+  table th:nth-child(4), table td:nth-child(4) {
+    display: table-cell !important;
+  }
+}
+
+/* === Sahifa maksimal kengligi === */
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1000px;
+  }
+}
+
+/* === Hoverni faqat kerakli elementlarga cheklash === */
+.card:hover,
+table tr:hover {
+  background-color: transparent !important;
+  box-shadow: none !important;
+  cursor: default !important;
+}
+
+/* Faqat tugmalar va havolalar uchun hover qoldirish */
+.card a:hover,
+.card button:hover,
+table a:hover,
+table button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+/* === Kanal nomi qora bo'lsin === */
+.channel-link {
+  font-weight: bold;
+  text-decoration: none;
+  color: black !important;
+}
+
+.channel-link:hover {
+  color: #333 !important;
+}
+
+/* === Modal dizayni === */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1055;
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    outline: 0;
+}
+
+.modal-dialog {
+    position: relative;
+    width: auto;
+    margin: 1.75rem auto;
+    pointer-events: none;
+}
+
+.modal-dialog-centered {
     display: flex;
     align-items: center;
-    gap: 5px;
-    padding: 10px 15px;
-    border-radius: 5px;
-    transition: 0.3s;
-  }
-  
-  .navbar-nav .nav-link:hover {
-    background-color: black !important;
-    color: var(--primary-color) !important;
-  }
-  
-  .navbar-nav .nav-link i {
-    font-size: 18px;
-  }
-  
-  /* === Mobil Navbar === */
-  @media (max-width: 991px) {
-    .navbar-toggler {
-      display: none !important;
-    }
-  
-    .navbar-collapse {
-      display: none !important;
-    }
-  
-    .d-lg-none {
-      display: flex !important;
-      align-items: center;
-    }
-  
-    .d-lg-none .nav-link {
-      font-size: 16px;
-      font-weight: bold;
-      padding: 10px 15px;
-      background-color: black;
-      color: white !important;
-      border-radius: 5px;
-    }
-  
-    .d-lg-none .nav-link:hover {
-      background-color: white;
-      color: black !important;
-      border: 1px solid black;
-    }
-  }
-  
-  /* === Mobil Footer (Pastki Menyu) === */
-  .mobile-bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    background-color: var(--dark-color);
-    display: flex;
-    justify-content: space-around;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
-  }
-  
-  .bottom-nav-link {
-    text-decoration: none;
-    color: white;
-    font-size: 14px;
-    text-align: center;
-    font-weight: bold;
-    flex: 1;
+    min-height: calc(100% - 3.5rem);
+}
+
+.modal-content {
+    position: relative;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    transition: 0.3s;
-  }
-  
-  .bottom-nav-link i {
-    font-size: 20px;
-    margin-bottom: 3px;
-  }
-  
-  .bottom-nav-link:hover {
-    color: var(--primary-color);
-  }
-  
-  .bottom-nav-link.active {
-    background-color: var(--primary-color);
-    color: black;
-  }
-  
-  /* === Asosiy sarlavha === */
-  .page-title {
-    font-size: 26px;
-    font-weight: bold;
-    color: var(--dark-color);
-  }
-  
-  /* === Tugmalar === */
-  .btn-primary {
-    background-color: var(--primary-color);
+    width: 100%;
+    pointer-events: auto;
+    background-color: #fff;
     border: none;
-    color: black;
-    font-weight: bold;
-  }
-  
-  .btn-primary:hover {
-    background-color: black;
-    color: white;
-  }
-  
-  /* === Kartalar === */
-  .card {
-    border: 1px solid var(--light-gray);
-    border-radius: 10px;
-    transition: 0.2s;
-  }
-  
-  .card:hover {
-    transform: scale(1.02);
-  }
-  
-  .card-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--dark-color);
-  }
-  
-  /* === Telefon raqam badge === */
-  .phone-badge {
+    border-radius: 15px;
+    outline: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode modal */
+.dark-mode .modal-content {
+    background-color: var(--card-background);
+    color: var(--text-color);
+}
+
+.modal-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--light-gray);
     background-color: var(--primary-color);
-    color: black;
-    font-weight: bold;
-    padding: 5px 10px;
-    border-radius: 5px;
+    border-radius: 15px 15px 0 0;
+}
+
+.modal-body {
+    position: relative;
+    flex: 1 1 auto;
+    padding: 1rem;
+}
+
+.modal-footer {
+    padding: 0.75rem;
+    border-top: 1px solid var(--light-gray);
+    border-radius: 0 0 15px 15px;
+}
+
+/* === Jadval kichrayganda yozuvlar kamaymasin === */
+@media (max-width: 500px) {
+  .table td, .table th {
+    font-size: 14px !important;
+    padding: 8px !important;
   }
-  
-  /* === Jadval === */
-  .table-hover tbody tr:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* === Jadval moslashuvchanligi === */
+@media (max-width: 990px) {
+  /* Faqat ID, Channel va Status ko'rinsin */
+  .table th:nth-child(4), .table td:nth-child(4) { /* Status */
+    display: table-cell !important;
   }
-  
-  .table thead {
-    background-color: var(--light-gray);
+
+  .table th:nth-child(3), .table td:nth-child(3), /* ID */
+  .table th:nth-child(5), .table td:nth-child(5)  /* Actions */
+  {
+    display: none;
   }
-  
-  .badge {
-    padding: 5px 10px;
-    font-size: 14px;
-    border-radius: 5px;
+}
+
+/* === 762px dan kichik holatda faqat №, Channel va Status chiqadi === */
+@media (max-width: 762px) {
+  .table th:nth-child(3), .table td:nth-child(3), /* ID */
+  .table th:nth-child(5), .table td:nth-child(5)  /* Actions */
+  {
+    display: none;
   }
-  
-  /* === Matnni qisqartirish === */
+
+  /* Matn hajmi kamaymasin, faqat qisqartirilsin */
   .truncate-text {
-    max-width: 200px;
+    max-width: 140px; 
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  
-  /* === Jadval ustunlarini optimallashtirish === */
-  .table th:first-child,
-  .table td:first-child {
-    width: 50px;
+}
+
+/* === 500px dan kichik ekranlarda jadval to'liq ekranga moslashsin === */
+@media (max-width: 500px) {
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+  }
+}
+
+/* === Theme Switcher === */
+.theme-switch {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #f4f4f4;
+  transition: .4s;
+  border-radius: 34px;
+  border: 2px solid var(--dark-color);
+}
+
+.slider:before {
+  position: absolute;
+  content: "🌞";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  width: 20px;
+  left: 2px;
+  bottom: 1px;
+  background-color: var(--dark-color);
+  transition: .4s;
+  border-radius: 50%;
+  font-size: 12px;
+}
+
+input:checked + .slider {
+  background-color: #333;
+  border-color: var(--primary-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+  content: "🌙";
+  background-color: var(--primary-color);
+}
+
+/* Dark mode uchun */
+.dark-mode .slider {
+  background-color: #333;
+  border-color: var(--primary-color);
+}
+
+/* === Login sahifasi === */
+.login-card {
+  background-color: var(--card-background);
+  color: var(--text-color);
+  border: 1px solid var(--light-gray);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.login-card .card-header {
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+  font-weight: bold;
+}
+
+.login-card .btn-primary {
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+  border: none;
+}
+
+.login-card .btn-primary:hover {
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+}
+
+/* === Dark mode uchun qo'shimcha stillar === */
+.dark-mode .card,
+.dark-mode .modal-content,
+.dark-mode .login-card,
+.dark-mode .announcement-create-card {
+  background-color: var(--card-background);
+  border-color: var(--light-gray);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.05);
+}
+
+.dark-mode .table {
+  background-color: #1a1a1a !important;
+  border-color: var(--light-gray);
+}
+
+.dark-mode .table thead {
+  background-color: var(--primary-color);
+}
+
+.dark-mode .table thead th {
+  color: var(--dark-color);
+}
+
+.dark-mode .table tbody tr {
+  background-color: #1a1a1a;
+  border-color: #333;
+}
+
+.dark-mode .table tbody td {
+  color: #ffffff;
+}
+
+.dark-mode .table-hover tbody tr:hover {
+  background-color: #2c2c2c;
+}
+
+.dark-mode .alert {
+  background-color: var(--card-background);
+  border-color: var(--light-gray);
+  color: var(--text-color);
+}
+
+/* === Link ranglari === */
+.dark-mode a {
+  color: var(--primary-color);
+}
+
+.dark-mode a:hover {
+  color: var(--text-color);
+}
+
+/* === Button ranglari === */
+.dark-mode .btn-primary {
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+}
+
+.dark-mode .btn-secondary {
+  background-color: #2d2d2d;
+  color: var(--text-color);
+}
+
+/* === Buttonlar === */
+.btn-secondary {
+  background-color: var(--light-gray);
+  border: none;
+  color: var(--text-color);
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  border: none;
+  color: #ffffff;
+}
+
+.btn-warning {
+  background-color: #ffc107;
+  border: none;
+  color: #000000;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border: none;
+  color: #ffffff;
+}
+
+/* Dark mode uchun button stillar */
+.dark-mode .btn-secondary {
+  background-color: #2d2d2d;
+  color: var(--text-color);
+}
+
+.dark-mode .btn-danger {
+  background-color: #dc3545;
+  color: #ffffff;
+}
+
+.dark-mode .btn-warning {
+  background-color: #ffc107;
+  color: #000000;
+}
+
+.dark-mode .btn-success {
+  background-color: #28a745;
+  color: #ffffff;
+}
+
+/* === Card va Modal === */
+.card, .modal-content {
+  background-color: var(--card-background);
+  border: 1px solid var(--light-gray);
+  color: var(--text-color);
+}
+
+/* === Alert === */
+.dark-mode .alert {
+  background-color: var(--card-background);
+  border-color: var(--light-gray);
+  color: var(--text-color);
+}
+
+/* === Table === */
+.table {
+  color: var(--text-color);
+  border-color: var(--light-gray);
+}
+
+.dark-mode .table {
+  color: var(--text-color);
+  border-color: var(--light-gray);
+}
+
+.dark-mode .table thead {
+  background-color: var(--dark-color);
+  border-color: var(--light-gray);
+}
+
+.dark-mode .table-hover tbody tr:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* === Link ranglari === */
+.dark-mode a {
+  color: var(--primary-color);
+}
+
+.dark-mode a:hover {
+  color: var(--text-color);
+}
+
+/* === Theme Switcher === */
+.theme-switch {
+  display: flex;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.slider {
+  background-color: #f4f4f4;
+}
+
+.dark-mode .slider {
+  background-color: #333;
+}
+
+input:checked + .slider {
+  background-color: #333;
+}
+
+/* === Mobil responsive === */
+@media (max-width: 410px) {
+  /* Sarlavhalar uchun */
+  h2.fw-bold {
+    font-size: 1.2rem;
+  }
+
+  /* Buttonlar uchun */
+  .btn-lg {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  /* Sarlavhadagi button va text */
+  .mb-3.col-12.d-flex {
+    flex-direction: column;
+    gap: 10px;
+    align-items: stretch !important;
+  }
+
+  /* "My Announcements" sarlavhasi */
+  .page-title {
+    font-size: 1.2rem;
     text-align: center;
   }
-  
-  /* === Mobilga moslashtirish === */
-  @media (max-width: 768px) {
-    .truncate-text {
-      max-width: 140px;
+
+  /* "New Announcement" buttoni */
+  .btn-success.btn-lg {
+    width: auto;
+    padding: 0.5rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+
+  /* Icon o'lchamini kattalashtirish */
+  .btn-success.btn-lg .bi {
+    font-size: 1.5rem;
+  }
+
+  /* Sarlavha va button konteynerini markazlashtirish */
+  .mb-3.col-12.d-flex {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center !important;
+    gap: 10px;
+  }
+
+  /* Sarlavha o'lchamini moslashtirish */
+  .page-title {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+  }
+
+  /* Kartalar uchun */
+  .card {
+    margin-bottom: 1rem;
+  }
+
+  /* Table uchun */
+  .table td, .table th {
+    padding: 0.5rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  /* Modal uchun */
+  .modal-content {
+    padding: 10px;
+  }
+}
+
+/* === Mobil responsive === */
+@media (max-width: 400px) {
+  .bottom-nav-link span {
+    display: none;
+  }
+
+  .bottom-nav-link i {
+    font-size: 24px;
+    margin: 0;
+  }
+}
+
+/* === Main konteyner === */
+main {
+  width: 100%;
+  min-height: calc(100vh - 120px);
+  padding-bottom: 80px;
+  background-color: var(--background-color);
+  display: flex;
+  justify-content: center;
+}
+
+/* === Container === */
+.container {
+  width: 100%;
+  max-width: 1200px !important;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: var(--background-color);
+}
+
+.container.py-4 {
+  width: 100%;
+  max-width: 1200px !important;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* === Card === */
+.card.shadow {
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+}
+
+/* Responsive */
+@media (min-width: 1200px) {
+  .container,
+  .container.py-4 {
+    max-width: 1200px !important;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container,
+  .container.py-4 {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .container,
+  .container.py-4 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+
+/* === E'lon yaratish sahifasi === */
+.announcement-create-card {
+    background-color: var(--card-background);
+    border: 1px solid var(--light-gray);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.announcement-create-header {
+    background-color: var(--primary-color);
+    padding: 20px;
+    text-align: center;
+}
+
+.announcement-create-title {
+    color: var(--dark-color);
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+/* Dark mode uchun sarlavha rangi */
+.dark-mode .announcement-create-title {
+    color: var(--text-color);
+}
+
+.announcement-create-body {
+    padding: 24px;
+}
+
+.announcement-create-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.announcement-form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.announcement-form-label {
+    color: var(--text-color);
+    font-weight: bold;
+    font-size: 1rem;
+}
+
+.announcement-form-textarea {
+    padding: 16px;
+    border: 2px solid var(--light-gray);
+    border-radius: 12px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+    min-height: 100px;
+    max-height: 150px;
+    resize: vertical;
+}
+
+.announcement-form-textarea::placeholder,
+.announcement-form-input::placeholder {
+    color: #999;
+    font-size: 0.95rem;
+}
+
+.announcement-form-textarea:focus,
+.announcement-form-input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.1);
+}
+
+.announcement-form-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.announcement-submit-btn,
+.announcement-cancel-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.announcement-submit-btn {
+    background-color: var(--primary-color);
+    color: var(--dark-color);
+}
+
+.announcement-cancel-btn {
+    background-color: var(--light-gray);
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.announcement-btn-icon {
+    font-size: 1.2rem;
+    opacity: 0.9;
+}
+
+/* Dark mode uchun stillar */
+.dark-mode .announcement-create-card {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+}
+
+.dark-mode .announcement-form-textarea,
+.dark-mode .announcement-form-input {
+    background-color: var(--card-background);
+    border-color: var(--light-gray);
+}
+
+/* Responsive dizayn */
+@media (max-width: 768px) {
+    .announcement-create-title {
+        font-size: 1.3rem;
     }
-  
-    .btn-group .btn {
-      font-size: 12px;
-      padding: 3px 6px;
+
+    .announcement-create-body {
+        padding: 16px;
     }
+
+    .announcement-form-textarea {
+        min-height: 80px;
+        max-height: 120px;
+    }
+}
+
+@media (max-width: 400px) {
+    .announcement-create-title {
+        font-size: 1.1rem;
+    }
+
+    .announcement-form-textarea,
+    .announcement-form-input {
+        padding: 12px;
+        font-size: 0.9rem;
+    }
+
+    .announcement-form-textarea::placeholder,
+    .announcement-form-input::placeholder {
+        font-size: 0.85rem;
+    }
+
+    .announcement-submit-btn,
+    .announcement-cancel-btn {
+        padding: 12px;
+    }
+
+    .announcement-btn-text {
+        display: none;
+    }
+
+    .announcement-btn-icon {
+        font-size: 1.5rem;
+        margin: 0;
+    }
+}
+
+/* === Raqamli input === */
+.announcement-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.announcement-form-input {
+    padding: 12px 16px;
+    border: 2px solid var(--light-gray);
+    border-radius: 12px;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    font-size: 1rem;
+    width: 100%;
+    transition: all 0.3s ease;
+    -moz-appearance: textfield; /* Firefox uchun */
+}
+
+/* Chrome, Safari, Edge uchun o'q-yoylarni yashirish */
+.announcement-form-input::-webkit-outer-spin-button,
+.announcement-form-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.announcement-input-suffix {
+    position: absolute;
+    right: 16px;
+    color: var(--text-color);
+    opacity: 0.7;
+    font-size: 0.9rem;
+    pointer-events: none;
+}
+
+.announcement-form-hint {
+    color: var(--text-color);
+    opacity: 0.7;
+    font-size: 0.85rem;
+    margin-top: 4px;
+}
+
+/* Dark mode uchun */
+.dark-mode .announcement-form-input {
+    background-color: var(--card-background);
+    border-color: var(--light-gray);
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+    .announcement-form-input {
+        padding: 10px 14px;
+        font-size: 0.9rem;
+    }
+
+    .announcement-input-suffix {
+        font-size: 0.85rem;
+        right: 14px;
+    }
+
+    .announcement-form-hint {
+        font-size: 0.8rem;
+    }
+}
+
+/* Hover effektini faqat kerakli elementlarga qo'llash */
+.dark-mode .card:hover .card-body,
+.dark-mode .card:hover .card-header {
+  background-color: var(--card-hover);
+}
+
+/* === Modal dizayni === */
+.channel-modal .modal-header {
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+  border: none;
+  padding: 15px 20px;
+}
+
+.channel-modal .modal-title {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.channel-modal .modal-body {
+  padding: 20px;
+  color: var(--text-color);
+}
+
+.channel-modal .channel-info {
+  margin-bottom: 15px;
+}
+
+.channel-modal .channel-info-label {
+  font-weight: bold;
+  color: var(--text-color);
+  margin-bottom: 5px;
+}
+
+.channel-modal .channel-info-value {
+  color: var(--text-color);
+}
+
+/* Dark mode modal */
+.dark-mode .channel-modal .modal-content {
+  background-color: var(--card-background);
+  border-color: var(--light-gray);
+}
+
+.dark-mode .channel-modal .modal-header {
+  background-color: var(--primary-color);
+  color: var(--dark-color);
+}
+
+.dark-mode .channel-modal .modal-body {
+  color: var(--text-color);
+}
+
+/* Responsive */
+@media (max-width: 576px) {
+    .page-title {
+        font-size: 1.3rem;
+    }
+    
+    .page-title i {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .page-title i {
+        display: none;
+    }
+    
+    .page-title .title-text {
+        display: block;
+        font-size: 1.2rem;
+        margin: 0;
+    }
+    
+    .add-channel-btn .btn-text {
+        display: none;
+    }
+    
+    .add-channel-btn i {
+        font-size: 1.5rem;
+        margin: 0;
+    }
+    
+    .add-channel-btn {
+        padding: 8px;
+        height: 36px;
+        width: 36px;
+        aspect-ratio: 1;
+    }
+}
+
+/* === Container va Card kengligi === */
+.container.py-4 {
+  padding-left: 20px;
+  padding-right: 20px;
+  max-width: 1200px; /* Container maksimal kengligi */
+}
+
+.card.shadow {
+  max-width: 100%;
+  margin: 0 auto;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+}
+
+/* Table konteyner */
+.table-responsive {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+/* Table */
+.table {
+  width: 100%;
+  margin-bottom: 0;
+  background-color: #ffffff !important;
+}
+
+/* Responsive */
+@media (min-width: 992px) {
+  .container.py-4 {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .container.py-4 {
+    padding-left: 15px;
+    padding-right: 15px;
   }
   
-  /* === Sahifa maksimal kengligi === */
-  @media (min-width: 1024px) {
-    .container {
-      max-width: 1000px;
-    }
+  .card.shadow {
+    margin: 0 5px;
   }
+}
+
+@media (max-width: 576px) {
+  .container.py-4 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  
+  .card.shadow {
+    margin: 0;
+  }
+}
+
+/* === Container === */
+.container.mt-3 {
+  margin-top: 0 !important;
+  background-color: transparent !important;
+  color: var(--text-color);
+}
+
+/* Alert container uchun */
+.container.mt-3 .alert {
+  margin-top: 1rem;
+  background-color: var(--card-background);
+  border-color: var(--light-gray);
+  color: var(--text-color);
+}
+
+/* Dark mode uchun */
+.dark-mode .container.mt-3 {
+  background-color: transparent !important;
+  color: var(--text-color);
+}
+
+.dark-mode .container.mt-3 .alert {
+  background-color: var(--card-background);
+  border-color: var(--light-gray);
+  color: var(--text-color);
+}
+
+/* === Container stillar === */
+.alert-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  margin-top: 20px;
+}
+
+.main-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: transparent;
+  min-height: calc(100vh - 120px);
+}
+
+/* Alert stillar */
+.alert-container .alert {
+  margin-bottom: 0;
+  border-radius: 10px;
+  background-color: var(--card-background);
+  border-color: var(--light-gray);
+  color: var(--text-color);
+}
+
+/* Dark mode */
+.dark-mode .alert-container .alert {
+  background-color: var(--card-background);
+  border-color: var(--light-gray);
+  color: var(--text-color);
+}
+
+/* Responsive */
+@media (min-width: 1200px) {
+  .alert-container,
+  .main-container {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .alert-container,
+  .main-container {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .alert-container,
+  .main-container {
+    padding: 10px;
+  }
+}
+
+/* === Login/Logout buttonlar === */
+.nav-link.login-link,
+.nav-link.logout-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 15px;
+  height: 38px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.login-link {
+  background-color: var(--primary-color);
+  color: var(--dark-color) !important;
+}
+
+.logout-link {
+  background-color: var(--light-gray);
+  color: var(--text-color) !important;
+}
+
+/* Dark mode uchun */
+.dark-mode .login-link {
+  background-color: var(--primary-color);
+  color: var(--dark-color) !important;
+}
+
+.dark-mode .logout-link {
+  background-color: #2d2d2d;
+  color: var(--text-color) !important;
+}
+
+/* Hover effektlari */
+.login-link:hover,
+.logout-link:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+/* Responsive */
+@media (max-width: 991px) {
+  .nav-link.login-link,
+  .nav-link.logout-link {
+    height: 36px;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .nav-link.login-link,
+  .nav-link.logout-link {
+    height: 34px;
+    padding: 5px 10px;
+    font-size: 0.85rem;
+  }
+  
+  .nav-link.login-link i,
+  .nav-link.logout-link i {
+    font-size: 1.1rem;
+  }
+}
+
+/* Alert stillarini yangilash */
+.alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    padding: 15px 25px;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    animation: slideIn 0.5s ease-out;
+    min-width: 300px;
+    max-width: 500px;
+}
+
+.alert-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.alert-info {
+    background-color: #17a2b8;
+    color: white;
+}
+
+.alert-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.alert-warning {
+    background-color: #ffc107;
+    color: #000;
+}
+
+.btn-close {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: currentColor;
+    opacity: 0.7;
+}
+
+.btn-close:hover {
+    opacity: 1;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Alert avtomatik yopilishi uchun */
+.alert.fade.show {
+    animation: slideIn 0.5s ease-out, fadeOut 0.5s ease-out 3s forwards;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.alert {
+    margin-bottom: 15px;
+}
