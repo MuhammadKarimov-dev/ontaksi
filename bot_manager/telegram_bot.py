@@ -48,23 +48,15 @@ class TelegramBot:
 
     async def connect(self):
         """Telegram klientini ulash"""
-        async with self._lock:
-            if not self._is_connected:
-                await self._app.start()
-                self._is_connected = True
+        pass  # Bot funksionalligini o'chirish
 
     async def disconnect(self):
         """Telegram klientini uzish"""
-        async with self._lock:
-            if self._is_connected:
-                await self._app.stop()
-                self._is_connected = False
+        pass  # Bot funksionalligini o'chirish
 
     async def send_message(self, channel_id, message):
         """Xabar yuborish"""
         try:
-            if not self._is_connected:
-                await self.connect()
             await self._app.send_message(channel_id, message)
             return True
         except Exception as e:

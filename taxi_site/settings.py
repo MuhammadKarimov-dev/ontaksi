@@ -160,13 +160,13 @@ LOGGING = {
     },
     'handlers': {
         'file': {
-            'level': 'INFO',
+            'level': 'ERROR',  # Faqat xatoliklarni yozish
             'class': 'logging.FileHandler',
             'filename': 'debug.log',
             'formatter': 'verbose',
         },
         'console': {
-            'level': 'INFO',
+            'level': 'ERROR',  # Faqat xatoliklarni yozish
             'class': 'logging.StreamHandler',
             'formatter': 'verbose',
         },
@@ -174,7 +174,7 @@ LOGGING = {
     'loggers': {
         '': {
             'handlers': ['file', 'console'],
-            'level': 'INFO',
+            'level': 'ERROR',
             'propagate': True,
         },
     },
