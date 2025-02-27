@@ -133,10 +133,10 @@
                 modalChannelStatus.innerHTML = `<span class="badge ${isActive ? 'bg-success' : 'bg-danger'}">${isActive ? 'Faol' : "O'chirilgan"}</span>`;
 
                 modalChannelActions.innerHTML = `
-                    <a href="{% url 'toggle_channel' '' %}${id}" class="btn ${isActive ? 'btn-warning' : 'btn-success'}">
+                    <a href="/channels/${id}/toggle/" class="btn ${isActive ? 'btn-warning' : 'btn-success'}">
                         ${isActive ? '<i class="bi bi-pause-fill"></i> To\'xtatish' : '<i class="bi bi-play-fill"></i> Faollashtirish'}
                     </a>
-                    <a href="{% url 'delete_channel' '' %}${id}" class="btn btn-danger" onclick="return confirm('Kanalni o\'chirmoqchimisiz?')">
+                    <a href="/channels/${id}/delete/" class="btn btn-danger" onclick="return confirm('Kanalni o\'chirmoqchimisiz?')">
                         <i class="bi bi-trash"></i> O'chirish
                     </a>
                 `;
