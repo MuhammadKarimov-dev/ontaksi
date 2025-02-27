@@ -1,6 +1,7 @@
 from pyrogram import Client
 import os
 import logging
+import asyncio
 
 logger = logging.getLogger(__name__)
 
@@ -43,9 +44,16 @@ class TelegramBot:
             if isinstance(chat_id, str) and chat_id.startswith('@'):
                 chat_id = chat_id[1:]
                 
-            self.app.send_message(chat_id, text)
+            # Yangi event loop yaratamiz
+            loop = asyncio.new_event_loop()
+            asyncio.set_event_loop(loop)
+            
+            # Xabar yuborish
+            loop.run_until_complete(self.app.send_message(chat_id, text))
             logger.info("Message sent successfully")
             return True
         except Exception as e:
             logger.error(f"Send message error: {str(e)}")
             return False
+        finally:
+            loop.close()
