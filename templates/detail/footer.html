@@ -1,11 +1,40 @@
 <div class="mobile-bottom-nav d-lg-none">
-    <a href="{% url 'create_announcement' %}" class="bottom-nav-link {% if request.resolver_match.url_name == 'create_announcement' %}active{% endif %}">
-        <i class="bi bi-plus-circle"></i> <br> E’lon berish
+    <a href="{% url 'announcement:list' %}" class="bottom-nav-link {% if request.resolver_match.url_name == 'list' %}active{% endif %}">
+        <i class="bi bi-megaphone"></i> <br> Менинг Элоним
     </a>
-    <a href="{% url 'announcement_list' %}" class="bottom-nav-link {% if request.resolver_match.url_name == 'announcement_list' %}active{% endif %}">
-        <i class="bi bi-megaphone"></i> <br> E’lonlar
-    </a>
-    <a href="{% url 'channel_list' %}" class="bottom-nav-link {% if request.resolver_match.url_name == 'channel_list' %}active{% endif %}">
-        <i class="bi bi-broadcast"></i> <br> Kanallar
+    <a href="{% url 'announcement:channel_list' %}" class="bottom-nav-link {% if request.resolver_match.url_name == 'channel_list' %}active{% endif %}">
+        <i class="bi bi-broadcast"></i> <br> Каналлар
     </a>
 </div>
+
+<style>
+.mobile-bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    display: flex;
+    padding: 0.5rem;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+}
+
+.bottom-nav-link {
+    flex: 1;
+    text-align: center;
+    padding: 0.5rem;
+    color: #6c757d;
+    text-decoration: none;
+    font-size: 0.8rem;
+}
+
+.bottom-nav-link.active {
+    color: #0d6efd;
+}
+
+.bottom-nav-link i {
+    font-size: 1.2rem;
+    margin-bottom: 0.2rem;
+}
+</style>

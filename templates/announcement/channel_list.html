@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% load custom_filters %}
+
+{% block title %}Каналлар рўйхати{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="mb-0">Каналлар рўйхати</h2>
+            <p class="text-muted mb-0">Жами: {{ channels|length }} та канал</p>
+        </div>
+        <a href="{% url 'announcement:add_channel' %}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Янги канал
+        </a>
+    </div>
+
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {% if message.tags == 'success' %}
+                <i class="bi bi-check-circle me-2"></i>
+            {% elif message.tags == 'error' %}
+                <i class="bi bi-exclamation-circle me-2"></i>
+            {% elif message.tags == 'warning' %}
+                <i class="bi bi-exclamation-triangle me-2"></i>
+            {% elif message.tags == 'info' %}
+                <i class="bi bi-info-circle me-2"></i>
+            {% endif %}
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if channels %}
+    <div class="row g-4">
+        {% for channel in channels %}
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="card border-0 shadow-hover h-100">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h5 class="card-title mb-1">{{ channel.channel_name }}</h5>
+                            <p class="card-subtitle text-muted small mb-0">
+                                ID: {% if channel.channel_id|starts_with:'-100' %}
+                                    {{ channel.channel_id|remove_prefix:'-100' }}
+                                {% elif channel.channel_id|starts_with:'@' %}
+                                    {{ channel.channel_id|remove_prefix:'@' }}
+                                {% else %}
+                                    {{ channel.channel_id }}
+                                {% endif %}
+                            </p>
+                        </div>
+                        <span class="badge {% if channel.is_active %}bg-success-subtle text-success{% else %}bg-danger-subtle text-danger{% endif %} rounded-pill">
+                            <i class="bi {% if channel.is_active %}bi-check-circle{% else %}bi-x-circle{% endif %} me-1"></i>
+                            {{ channel.is_active|yesno:"Фаол,Ўчирилган" }}
+                        </span>
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2 mt-auto">
+                        <a href="{% url 'announcement:edit_channel' channel.id %}" 
+                           class="btn btn-outline-warning btn-sm" 
+                           title="Таҳрирлаш">
+                            <i class="bi bi-pencil"></i>
+                        </a>
+                        <a href="{% url 'announcement:toggle_channel' channel.id %}" 
+                           class="btn btn-sm {% if channel.is_active %}btn-outline-danger{% else %}btn-outline-success{% endif %}"
+                           title="{% if channel.is_active %}Тўхтатиш{% else %}Ёқиш{% endif %}">
+                            <i class="bi {% if channel.is_active %}bi-pause-fill{% else %}bi-play-fill{% endif %}"></i>
+                        </a>
+                        <a href="{% url 'announcement:delete_channel' channel.id %}" 
+                           class="btn btn-outline-danger btn-sm"
+                           onclick="return confirm('Ҳақиқатан ҳам «{{ channel.channel_name }}» каналини ўчирмоқчимисиз?')"
+                           title="Ўчириш">
+                            <i class="bi bi-trash"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+        <i class="bi bi-collection display-1 text-muted mb-3"></i>
+        <h4 class="text-muted">Ҳозирча каналлар қўшилмаган</h4>
+        <p class="text-muted mb-4">Янги канал қўшиш учун юқоридаги тугмани босинг</p>
+        <a href="{% url 'announcement:add_channel' %}" class="btn btn-primary">
+            <i class="bi bi-plus-lg"></i> Янги канал қўшиш
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.shadow-hover {
+    transition: all 0.3s ease;
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+}
+.shadow-hover:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+}
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+.badge {
+    font-weight: 500;
+    padding: 0.5em 0.75em;
+}
+.card-title {
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+.messages {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 1050;
+    min-width: 250px;
+    max-width: 350px;
+}
+.alert {
+    margin-bottom: 0.5rem;
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+}
+</style>
+{% endblock %} 

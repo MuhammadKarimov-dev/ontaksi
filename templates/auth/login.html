@@ -1,40 +1,38 @@
 {% extends 'base.html' %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Kirish{% endblock %}
 
 {% block content %}
-<div class="container">
+<div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-            <div class="card mt-5 shadow-sm">
-                <div class="card-header bg-primary text-white text-center">
-                    <h4 class="mb-0">🔑 Login</h4>
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header py-3">
+                    <h3 class="mb-0 fs-4 text-center">Tizimga kirish</h3>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     {% if error %}
-                    <div class="alert alert-danger">❌ Username yoki password xato!</div>
+                    <div class="alert alert-danger">
+                        {{ error }}
+                    </div>
                     {% endif %}
+                    
                     <form method="post">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label class="form-label fw-bold">👤 Username</label>
-                            <input type="text" name="username" class="form-control shadow-sm" required placeholder="Username kiriting">
+                            <label class="form-label fw-bold">Login</label>
+                            <input type="text" name="username" class="form-control" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-bold">🔑 Password</label>
-                            <input type="password" name="password" class="form-control shadow-sm" required placeholder="Password kiriting">
+                            <label class="form-label fw-bold">Parol</label>
+                            <input type="password" name="password" class="form-control" required>
                         </div>
-                        <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
-                            🚀 Login
-                        </button>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Kirish
+                            </button>
+                        </div>
                     </form>
-                </div>
-                <div class="card-footer text-center bg-light py-3">
-                    <p class="mb-0">Hali ro‘yxatdan o‘tmaganmisiz?  
-                        <a href="http://t.me/Muhammad_KarimovDev" class="text-primary fw-bold" target="_blank">
-                            📲 Ro‘yxatdan o‘tish (Telegram)
-                        </a>
-                    </p>
                 </div>
             </div>
         </div>

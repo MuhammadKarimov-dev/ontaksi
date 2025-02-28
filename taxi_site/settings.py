@@ -36,6 +36,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'announcement.middleware.DBConnectionMiddleware',
 ]
 
 ROOT_URLCONF = 'taxi_site.urls'
@@ -68,6 +69,10 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        'OPTIONS': {
+            'timeout': 30,  # SQLite timeout 30 sekundgacha
+        },
+        'CONN_MAX_AGE': 60,  # Connection umri 60 sekund
     }
 }
 
@@ -122,7 +127,7 @@ import os
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
+    os.path.join(BASE_DIR, 'static'),
 ]
 
 # Static fayllarni yig'ish uchun
@@ -130,5 +135,20 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 
 
-LOGIN_URL = 'login'  # login_view funksiyasining name'i
-LOGIN_REDIRECT_URL = 'home' 
+LOGIN_URL = 'announcement:login'  # namespace bilan
+LOGIN_REDIRECT_URL = 'announcement:list'  # namespace bilan 
+
+# Telegram Bot sozlamalari
+TELEGRAM_BOT_TOKEN = '6887989432:AAGpwRQEGBEEEEEEEEEEEEEEEEEEEEEEEEE'  # O'z bot tokeningizni kiriting
+
+# Webhook URL
+WEBHOOK_URL = "https://your-webhook-url.com/send-message"  # O'zingizning webhook URL'ingizni yozing 
+
+# Cache settings
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+        'TIMEOUT': 300,  # 5 daqiqa
+    }
+} 

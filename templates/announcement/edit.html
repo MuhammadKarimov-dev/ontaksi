@@ -3,38 +3,24 @@
 {% block title %}Эълонни таҳрирлаш{% endblock %}
 
 {% block content %}
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-10 col-lg-8">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header py-3 text-center" style="background-color: var(--primary-color); color: black; font-weight: bold;">
-                    <h3 class="mb-0 fs-4">Эълонни таҳрирлаш</h3>
-                </div>
-                <div class="card-body p-4">
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Эълон матни</label>
-                            <textarea name="message" class="form-control form-control-lg" rows="5" 
-                                required placeholder="Эълон матнини киритинг...">{{ announcement.message }}</textarea>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label fw-bold">Такрорлаш интервали (дақиқада)</label>
-                            <input name="interval" type="number" class="form-control form-control-lg" min="1"
-                                value="{{ announcement.interval }}" required placeholder="Масалан: 5 дақиқа" />
-                        </div>
-                        <div class="d-grid gap-3 mt-4">
-                            <button type="submit" class="btn btn-success btn-lg w-100">
-                                <i class="bi bi-check2-circle"></i> Сақлаш
-                            </button>
-                            <a href="{% url 'announcement_list' %}" class="btn btn-secondary btn-lg w-100">
-                                <i class="bi bi-x-circle"></i> Бекор қилиш
-                            </a>
-                        </div>
-                    </form>
-                </div>
-            </div>
+<div class="container mt-4">
+    <h2>E'lonni tahrirlash</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        
+        <div class="form-group">
+            <label>Xabar matni:</label>
+            <textarea name="message" class="form-control" rows="5">{{ announcement.message }}</textarea>
         </div>
-    </div>
+        
+        <div class="form-group">
+            <label>Yuborish oralig'i (daqiqa):</label>
+            <input type="number" name="interval" class="form-control" value="{{ announcement.interval }}" min="1">
+        </div>
+        
+        <button type="submit" class="btn btn-primary mt-3">Saqlash</button>
+        <a href="{% url 'announcement:list' %}" class="btn btn-secondary mt-3">Bekor qilish</a>
+    </form>
 </div>
 {% endblock %}

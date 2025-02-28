@@ -1,0 +1,250 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h2>E'lonlar ro'yxati</h2>
+    <div class="announcements">
+        {% for announcement in announcements %}
+        <div class="announcement-item">
+            <p>{{ announcement.message }}</p>
+            <div class="actions">
+                {% if announcement.is_active %}
+                    <a href="{% url 'announcement:stop_announcement' announcement.id %}"
+                        class="btn btn-danger stop-btn"
+                        data-id="{{ announcement.id }}">
+                        <i class="fas fa-stop"></i> To'xtatish
+                    </a>
+                {% else %}
+                    <a href="{% url 'announcement:start_announcement' announcement.id %}"
+                        class="btn btn-success start-btn"
+                        data-id="{{ announcement.id }}">
+                        <i class="fas fa-play"></i> Boshlash
+                    </a>
+                {% endif %}
+                <a href="{% url 'announcement:edit_announcement' announcement.id %}"
+                    class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Tahrirlash
+                </a>
+                <a href="{% url 'announcement:delete_announcement' announcement.id %}"
+                    class="btn btn-danger delete-btn"
+                    data-id="{{ announcement.id }}">
+                    <i class="fas fa-trash"></i> O'chirish
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<script>
+let isProcessing = false;
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Start buttonlar uchun
+    document.querySelectorAll('.start-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (!isProcessing) {
+                const id = this.dataset.id;
+                startAnnouncement(this, id);
+            }
+        });
+    });
+
+    // Stop buttonlar uchun
+    document.querySelectorAll('.stop-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (!isProcessing) {
+                const id = this.dataset.id;
+                stopAnnouncement(this, id);
+            }
+        });
+    });
+
+    // Delete buttonlar uchun
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            e.preventDefault();
+            if (!isProcessing) {
+                const id = this.dataset.id;
+                if (confirm('Rostdan ham o\'chirmoqchimisiz?')) {
+                    deleteAnnouncement(this, id);
+                }
+            }
+        });
+    });
+});
+
+function startAnnouncement(link, id) {
+    isProcessing = true;
+    
+    link.classList.add('disabled');
+    link.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Boshlanmoqda...';
+
+    const otherLinks = document.querySelectorAll('.start-btn');
+    otherLinks.forEach(btn => {
+        if (btn !== link) {
+            btn.classList.add('disabled');
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span> Kuting...';
+        }
+    });
+
+    fetch(`/start_announcement/${id}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(data => {
+        setTimeout(() => {
+            link.classList.remove('disabled', 'btn-success', 'start-btn');
+            link.classList.add('btn-danger', 'stop-btn');
+            link.innerHTML = '<i class="fas fa-stop"></i> To\'xtatish';
+            link.href = `/stop_announcement/${id}/`;
+            
+            link.removeEventListener('click', startAnnouncement);
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!isProcessing) {
+                    stopAnnouncement(this, id);
+                }
+            });
+            
+            isProcessing = false;
+        }, 5000);
+    })
+    .catch(error => {
+        console.error('Xatolik:', error);
+        link.classList.remove('disabled');
+        link.innerHTML = '<i class="fas fa-play"></i> Boshlash';
+        
+        otherLinks.forEach(btn => {
+            if (btn !== link) {
+                btn.classList.remove('disabled');
+                btn.innerHTML = '<i class="fas fa-play"></i> Boshlash';
+            }
+        });
+        isProcessing = false;
+        alert('Xatolik yuz berdi. Qaytadan urinib ko\'ring.');
+    });
+}
+
+function stopAnnouncement(link, id) {
+    isProcessing = true;
+    
+    link.classList.add('disabled');
+    link.innerHTML = '<span class="spinner-border spinner-border-sm"></span> To\'xtatilmoqda...';
+
+    fetch(`/stop_announcement/${id}/`, {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': getCookie('csrftoken'),
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) throw new Error('Network response was not ok');
+        return response.json();
+    })
+    .then(data => {
+        setTimeout(() => {
+            link.classList.remove('disabled', 'btn-danger', 'stop-btn');
+            link.classList.add('btn-success', 'start-btn');
+            link.innerHTML = '<i class="fas fa-play"></i> Boshlash';
+            link.href = `/start_announcement/${id}/`;
+            
+            link.removeEventListener('click', stopAnnouncement);
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                if (!isProcessing) {
+                    startAnnouncement(this, id);
+                }
+            });
+            
+            isProcessing = false;
+        }, 5000);
+    })
+    .catch(error => {
+        console.error('Xatolik:', error);
+        link.classList.remove('disabled');
+        link.innerHTML = '<i class="fas fa-stop"></i> To\'xtatish';
+        isProcessing = false;
+        alert('Xatolik yuz berdi. Qaytadan urinib ko\'ring.');
+    });
+}
+
+function deleteAnnouncement(link, id) {
+    if (isProcessing) return;
+    
+    if (confirm('Rostdan ham o\'chirmoqchimisiz?')) {
+        isProcessing = true;
+        link.classList.add('disabled');
+        
+        fetch(`/delete_announcement/${id}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCookie('csrftoken'),
+                'Content-Type': 'application/json'
+            }
+        })
+        .then(response => {
+            if (response.ok) {
+                setTimeout(() => {
+                    location.reload();
+                }, 5000);
+            } else {
+                throw new Error('Network response was not ok');
+            }
+        })
+        .catch(error => {
+            console.error('Xatolik:', error);
+            link.classList.remove('disabled');
+            isProcessing = false;
+            alert('Xatolik yuz berdi. Qaytadan urinib ko\'ring.');
+        });
+    }
+}
+</script>
+
+<style>
+.announcement-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.actions {
+    margin-top: 10px;
+}
+
+.btn {
+    margin-right: 5px;
+}
+
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.2em;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+}
+
+.btn:disabled {
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    opacity: 0.65;
+}
+
+.btn i {
+    margin-right: 5px;
+}
+</style>
+{% endblock %} 
