@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -11,9 +12,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@i)!+(41weo9jc21w&r3959^0$d)bytq4+8_r40!-7b2jh0$wj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['81.200.146.99', 'ontaksi.uz', 'www.ontaksi.uz']
 
 
 # Application definition
@@ -119,11 +120,10 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://*",  # Barcha HTTPS domenlar uchun
-    "http://*",    # Ngrok domeningizni shu yerga qo'shing
-    'https://*.ngrok-free.app'
+    "http://ontaksi.uz",
+    "http://www.ontaksi.uz",
+    "http://81.200.146.99"
 ]
-import os
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
@@ -141,8 +141,8 @@ LOGIN_REDIRECT_URL = 'announcement:list'  # namespace bilan
 # Telegram Bot sozlamalari
 TELEGRAM_BOT_TOKEN = '6887989432:AAGpwRQEGBEEEEEEEEEEEEEEEEEEEEEEEEE'  # O'z bot tokeningizni kiriting
 
-# Webhook URL
-WEBHOOK_URL = "https://your-webhook-url.com/send-message"  # O'zingizning webhook URL'ingizni yozing 
+# Webhook URL - HTTP ishlatamiz
+WEBHOOK_URL = "http://ontaksi.uz/send-message"
 
 # Cache settings
 CACHES = {
@@ -151,4 +151,14 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
         'TIMEOUT': 300,  # 5 daqiqa
     }
-} 
+}
+
+# Session va Cookie sozlamalari
+SESSION_COOKIE_SECURE = False  # HTTP uchun
+CSRF_COOKIE_SECURE = False    # HTTP uchun
+
+# Security Headers
+SECURE_SSL_REDIRECT = False   # HTTPS ga redirect qilmaslik
+SECURE_HSTS_SECONDS = 0      # HSTS o'chirish
+SECURE_HSTS_INCLUDE_SUBDOMAINS = False
+SECURE_HSTS_PRELOAD = False 

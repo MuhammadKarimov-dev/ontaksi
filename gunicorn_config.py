@@ -1,7 +1,7 @@
 import multiprocessing
 
 # Server socket settings
-bind = "0.0.0.0:8000"
+bind = "unix:/var/www/ontaksi/ontaksi.sock"  # Unix socket ishlatamiz
 workers = multiprocessing.cpu_count() * 2 + 1
 worker_class = "sync"
 
@@ -11,8 +11,8 @@ keepalive = 5
 worker_connections = 1000
 
 # Logging settings
-accesslog = "-"
-errorlog = "-"
+accesslog = "/var/log/ontaksi/access.log"
+errorlog = "/var/log/ontaksi/error.log"
 loglevel = "info"
 
 # Process naming
@@ -30,5 +30,10 @@ max_requests_jitter = 50
 # Reload settings
 reload = True
 reload_engine = "auto"
+
+# Xavfsizlik
+umask = 0o007
+user = 'www-data'
+group = 'www-data'
 
 capture_output = True 
