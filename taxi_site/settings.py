@@ -1,4 +1,3 @@
-
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -107,7 +106,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
@@ -116,19 +115,17 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CSRF_TRUSTED_ORIGINS = [
     "https://*",  # Barcha HTTPS domenlar uchun
-    "http://*",    # Ngrok domeningizni shu yerga qo‘shing
+    "http://*",    # Ngrok domeningizni shu yerga qo'shing
     'https://*.ngrok-free.app'
 ]
 import os
 
-
-STATIC_URL = '/static/'  # Static URL yo‘li
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),  # Static fayllar joylashgan papka
+    os.path.join(BASE_DIR, 'static')
 ]
 
-# Static fayllarni yig‘ish uchun
+# Static fayllarni yig'ish uchun
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')  
 
 

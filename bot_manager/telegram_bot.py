@@ -46,15 +46,13 @@ class TelegramBot:
                 await self._app.stop()
                 self._is_connected = False
 
-    async def send_message(self, channel_id, message):
+    async def send_message(self, chat_id, message):
         """Xabar yuborish"""
         try:
-            if not self._is_connected:
-                await self.connect()
-            await self._app.send_message(channel_id, message)
+            await self._app.send_message(chat_id, message)
             return True
         except Exception as e:
-            print(f"Xabar yuborishda xatolik: {e}")
+            print(f"Xabar yuborishda xatolik: {str(e)}")
             return False
 
     def send_message_sync(self, channel_id, message):
