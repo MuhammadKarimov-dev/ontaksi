@@ -1,31 +1,31 @@
 {% extends 'base.html' %}
 
-{% block title %}Kirish{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6 col-lg-4">
-            <div class="card mt-5 shadow-sm login-card">
-                <div class="card-header text-center">
-                    <h4 class="mb-0">🔑 Kirish</h4>
+            <div class="card mt-5 shadow-sm">
+                <div class="card-header bg-primary text-white text-center">
+                    <h4 class="mb-0">🔑 Login</h4>
                 </div>
                 <div class="card-body">
                     {% if error %}
-                    <div class="alert alert-danger">❌ Foydalanuvchi nomi yoki parol xato!</div>
+                    <div class="alert alert-danger">❌ Username yoki password xato!</div>
                     {% endif %}
                     <form method="post">
                         {% csrf_token %}
                         <div class="mb-3">
-                            <label class="form-label fw-bold">👤 Foydalanuvchi nomi</label>
-                            <input type="text" name="username" class="form-control shadow-sm" required placeholder="Foydalanuvchi nomini kiriting">
+                            <label class="form-label fw-bold">👤 Username</label>
+                            <input type="text" name="username" class="form-control shadow-sm" required placeholder="Username kiriting">
                         </div>
                         <div class="mb-3">
-                            <label class="form-label fw-bold">🔑 Parol</label>
-                            <input type="password" name="password" class="form-control shadow-sm" required placeholder="Parolni kiriting">
+                            <label class="form-label fw-bold">🔑 Password</label>
+                            <input type="password" name="password" class="form-control shadow-sm" required placeholder="Password kiriting">
                         </div>
                         <button type="submit" class="btn btn-primary w-100 py-2 fw-bold">
-                            🚀 Kirish
+                            🚀 Login
                         </button>
                     </form>
                 </div>

@@ -1,27 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}My Announcements{% endblock %}
+{% block title %}Менинг Эълонларим{% endblock %}
 
 {% block content %}
 <div class="container py-4">
     <div class="row">
         <div class="mb-3 col-12 d-flex justify-content-between align-items-center">
-            <h2 class="fw-bold">📢 Mening E'lonlarim</h2>
-            <a href="{% url 'create_announcement' %}" class="btn btn-success px-3 add-announcement-btn">
-                <i class="bi bi-plus-circle-fill"></i>
-                <span class="d-none d-sm-inline ms-2">Yangi</span>
+            <h2 class="fw-bold">📢 Менинг Эълонларим</h2>
+            <a href="{% url 'create_announcement' %}" class="btn btn-success btn-lg px-4 shadow-sm">
+                <i class="bi bi-plus-lg"></i> Янги Эълон
             </a>
         </div>
     </div>
-
-    {% if messages %}
-        {% with message=messages.0 %}
-            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        {% endwith %}
-    {% endif %}
 
     <div class="row">
         {% for announcement in announcements %}
@@ -30,7 +20,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-center mb-3">
                         <h5 class="card-title fw-bold">
-                            📢 Announcement #{{ announcement.id }}
+                            📢 Эълон #{{ announcement.id }}
                         </h5>
                         <span class="badge rounded-pill px-3 py-2 
                             {% if announcement.is_active %}
@@ -39,42 +29,38 @@
                                 bg-secondary text-white
                             {% endif %}">
                             {% if announcement.is_active %}
-                                Active
+                                Фаол
                             {% else %}
-                                Inactive
+                                Тўхтатилган
                             {% endif %}
                         </span>
                     </div>
 
                     <div class="announcement-details mb-3">
                         <p class="mb-2" style="white-space: pre-wrap;">{{ announcement.message }}</p>
-                        <p class="mb-2">🔁 Every {{ announcement.interval }} minutes</p>
+                        <p class="mb-2">🔁 Ҳар {{ announcement.interval }} дақиқада такрорланади</p>
                     </div>
 
                     <div class="d-grid gap-2">
                         {% if announcement.is_active %}
                         <a href="{% url 'stop_announcement' announcement.id %}"
                             class="btn btn-warning btn-sm">
-                            <i class="bi bi-pause-fill"></i>
-                            <span>To'xtatish</span>
+                            ⏸ Тўхтатиш
                         </a>
                         {% else %}
                         <a href="{% url 'start_announcement' announcement.id %}"
                             class="btn btn-success btn-sm">
-                            <i class="bi bi-play-fill"></i>
-                            <span>Boshlash</span>
+                            ▶ Бошлаш
                         </a>
                         {% endif %}
                         <a href="{% url 'edit_announcement' announcement.id %}"
                             class="btn btn-primary btn-sm">
-                            <i class="bi bi-pencil-fill"></i>
-                            <span>Tahrirlash</span>
+                            ✏ Таҳрирлаш
                         </a>
                         <a href="{% url 'delete_announcement' announcement.id %}"
                             class="btn btn-danger btn-sm"
-                            onclick="return confirm('Rostdan ham o\'chirmoqchimisiz?')">
-                            <i class="bi bi-trash-fill"></i>
-                            <span>O'chirish</span>
+                            onclick="return confirm('Ростдан ҳам бу эълонни ўчирмоқчимисиз?')">
+                            🗑 Ўчириш
                         </a>
                     </div>
                 </div>
@@ -83,9 +69,9 @@
         {% empty %}
         <div class="col-12">
             <div class="alert alert-info text-center p-4">
-                <h5>No announcements yet</h5>
+                <h5>Ҳозирча эълонлар йўқ</h5>
                 <a href="{% url 'create_announcement' %}" class="btn btn-success btn-lg mt-3">
-                    ✨ Add New Announcement
+                    ✨ Янги Эълон Қўшиш
                 </a>
             </div>
         </div>

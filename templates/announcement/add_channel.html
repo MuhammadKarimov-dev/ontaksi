@@ -1,41 +1,33 @@
 {% extends 'base.html' %}
 
-{% block title %}Add New Channel{% endblock %}
+{% block title %}Янги канал қўшиш{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container py-4">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="mb-0">Yangi kanal qo'shish</h5>
+        <div class="col-12 col-md-8 col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header py-3" style="background-color: var(--primary-color); color: black; font-weight: bold;">
+                    <h3 class="mb-0 fs-4 text-center">Янги канал қўшиш</h3>
                 </div>
-                <div class="card-body">
+                <div class="card-body p-4">
                     <form method="post">
                         {% csrf_token %}
-                        
                         <div class="mb-3">
-                            <label class="form-label">Kanal nomi</label>
+                            <label class="form-label fw-bold">Канал номи</label>
                             <input type="text" name="name" class="form-control" required>
                         </div>
-
                         <div class="mb-3">
-                            <label class="form-label">Kanal usernamesi</label>
-                            <div class="input-group">
-                                <span class="input-group-text">@</span>
-                                <input type="text" name="username" class="form-control" required>
-                            </div>
-                            <div class="form-text">
-                                Masalan: agar kanal linki @mychannel bo'lsa, "mychannel" ni kiriting
-                            </div>
+                            <label class="form-label fw-bold">Канал ID</label>
+                            <input type="text" name="channel_id" class="form-control" required>
+                            <div class="form-text">Масалан: @channel_name ёки 100123456789</div>
                         </div>
-
-                        <div class="d-grid gap-2">
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-plus-circle"></i> Qo'shish
+                        <div class="d-flex justify-content-end gap-2">
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="bi bi-plus-circle"></i> Қўшиш
                             </button>
-                            <a href="{% url 'dashboard' %}" class="btn btn-secondary">
-                                <i class="bi bi-arrow-left"></i> Orqaga
+                            <a href="{% url 'channel_list' %}" class="btn btn-secondary px-4">
+                                <i class="bi bi-x-circle"></i> Бекор қилиш
                             </a>
                         </div>
                     </form>

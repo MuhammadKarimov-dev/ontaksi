@@ -22,42 +22,14 @@
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
    
-    <script>
-      document.addEventListener("DOMContentLoaded", function() {
-        const toggleSwitch = document.querySelector('.theme-switch input[type="checkbox"]');
-        const currentTheme = localStorage.getItem('theme');
-
-        if (currentTheme) {
-            document.documentElement.setAttribute('data-theme', currentTheme);
-
-            if (currentTheme === 'dark') {
-                toggleSwitch.checked = true;
-                document.body.classList.add('dark-mode');
-            }
-        }
-
-        toggleSwitch.addEventListener('change', function(e) {
-            if (e.target.checked) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-                document.body.classList.add('dark-mode');
-                localStorage.setItem('theme', 'dark');
-            } else {
-                document.documentElement.setAttribute('data-theme', 'light');
-                document.body.classList.remove('dark-mode');
-                localStorage.setItem('theme', 'light');
-            }
-        });
-      });
-    </script>
   </head>
-  <body class="d-flex flex-column min-vh-100">
+  <body class="d-flex flex-column min-vh-100 bg-light-gray text-dark">
     {% include 'detail/navbar.html' %}
 
-    <!-- Alert container -->
-    <div class="alert-container">
+    <div class="container mt-3">
       {% if messages %} {% for message in messages %}
       <div
-        class="alert alert-{{ message.tags }} alert-dismissible fade show"
+        class="alert alert-{{ message.tags }} alert-dismissible fade show bg-warning text-dark"
         role="alert"
       >
         {{ message }}
@@ -71,8 +43,7 @@
       {% endfor %} {% endif %}
     </div>
 
-    <!-- Main container -->
-    <main class="main-container">
+    <main class="flex-grow container my-4">
       {% block content %}{% endblock %}
     </main>
 
@@ -82,29 +53,5 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Body tag yopilishidan oldin -->
-    <script>
-    // Success xabarlar uchun 2 sekund
-    document.querySelectorAll('.alert-success').forEach(function(alert) {
-        setTimeout(function() {
-            alert.remove();
-        }, 2000);
-    });
-
-    // Info xabarlar uchun 3 sekund
-    document.querySelectorAll('.alert-info').forEach(function(alert) {
-        setTimeout(function() {
-            alert.remove();
-        }, 3000);
-    });
-
-    // Error xabarlar uchun 5 sekund
-    document.querySelectorAll('.alert-danger').forEach(function(alert) {
-        setTimeout(function() {
-            alert.remove();
-        }, 5000);
-    });
-    </script>
   </body>
 </html>

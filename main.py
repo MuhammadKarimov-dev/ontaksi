@@ -1,42 +1,11 @@
-import os
-import sys
-import django
-import multiprocessing
+from pyrogram import Client
 
-# Django sozlamalarini o'rnatish
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'taxi_site.settings')
-django.setup()
+api_id='27075572 '
+api_hash='1b56557db16cca997768fe87a724e75b'
 
-from bot_manager.bot import TelegramBot
-from django.core.management import execute_from_command_line
+app = Client("user_taxi", api_id, api_hash)
 
-def run_django():
-    execute_from_command_line(['manage.py', 'runserver'])
-
-def run_bot():
-    try:
-        bot = TelegramBot()
-        bot.start()
-    except KeyboardInterrupt:
-        if bot:
-            bot.stop()
-    except Exception as e:
-        print(f"Bot xatoligi: {e}")
-
-if __name__ == '__main__':
-    try:
-        # Django va bot jarayonlarini yaratish
-        django_process = multiprocessing.Process(target=run_django)
-        bot_process = multiprocessing.Process(target=run_bot)
-
-        # Jarayonlarni boshlash
-        django_process.start()
-        bot_process.start()
-
-        # Jarayonlarni kutish
-        django_process.join()
-        bot_process.join()
-
-    except KeyboardInterrupt:
-        print("\nServer to'xtatildi")
-        sys.exit(0)
+with app:
+    chats = app.get_dialogs()
+    for chat in chats:
+        print(f"{chat.chat.title} - {chat.chat.id}")
