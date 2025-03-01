@@ -1,4 +1,3 @@
-
 import multiprocessing
 
 # Server socket settings
@@ -15,9 +14,9 @@ keepalive = 5
 graceful_timeout = 120
 
 # Logging settings
-accesslog = "-"  # stdout ga chiqarish
-errorlog = "-"   # stderr ga chiqarish
-loglevel = "info"
+accesslog = "/var/log/gunicorn/access.log"
+errorlog = "/var/log/gunicorn/error.log"
+loglevel = "debug"
 capture_output = True
 enable_stdio_inheritance = True
 

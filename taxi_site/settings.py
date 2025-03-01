@@ -162,3 +162,23 @@ SECURE_SSL_REDIRECT = False   # HTTPS ga redirect qilmaslik
 SECURE_HSTS_SECONDS = 0      # HSTS o'chirish
 SECURE_HSTS_INCLUDE_SUBDOMAINS = False
 SECURE_HSTS_PRELOAD = False 
+
+# Log sozlamalari
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': 'debug.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+} 
