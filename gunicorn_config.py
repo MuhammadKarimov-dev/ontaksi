@@ -1,8 +1,8 @@
 import multiprocessing
 
 # Server socket settings
-bind = "0.0.0.0:8000"
-workers = multiprocessing.cpu_count() * 2 + 1  # CPU core soniga qarab worker sonini belgilash
+bind = "unix:/var/www/ontaksi/ontaksi.sock"
+workers = 3
 worker_class = "sync"
 worker_connections = 1000
 max_requests = 1000
