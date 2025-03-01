@@ -167,23 +167,28 @@ SECURE_HSTS_PRELOAD = False
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
+            'formatter': 'verbose'
         },
         'file': {
-            'level': 'ERROR',
             'class': 'logging.FileHandler',
-            'filename': '/var/log/django-debug.log',
+            'filename': '/var/log/gunicorn/django-debug.log',
+            'formatter': 'verbose'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': True,
         },
-    },
-    'root': {
-        'handlers': ['console', 'file'],
-        'level': 'DEBUG',
-    },
-    'django': {
-        'handlers': ['console', 'file'],
-        'level': 'DEBUG',
-        'propagate': True,
-    },
+    }
 } 
