@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container-fluid py-5 px-4">
+    <!-- Sarlavha -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="display-5 fw-bold mb-3">Kanallar ro'yxati</h2>
+            <div class="badge bg-primary fs-5 px-4 py-2">
+                <i class="fas fa-list me-2"></i>
+                Jami: {{ channels|length }} ta kanal 
+                (Faol: {{ channels|filter:"is_active"|length }} ta)
+            </div>
+        </div>
+        <a href="{% url 'announcement:add_channel' %}" class="btn btn-primary btn-lg px-4 py-3 fs-5">
+            <i class="fas fa-plus me-2"></i> Yangi kanal qo'shish
+        </a>
+    </div>
+
+    <!-- Xabarlar -->
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Kanallar ro'yxati -->
+    <div class="row g-4">
+        {% for channel in channels %}
+        <div class="col-12 col-md-6 col-xl-4">
+            <div class="card border-0 shadow h-100 channel-card">
+                <!-- Kanal sarlavhasi -->
+                <div class="card-header border-0 bg-white pt-4 pb-2 px-4">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="card-title fw-bold text-truncate mb-0 fs-4">
+                            {{ channel.channel_name|default:channel.channel_id }}
+                        </h4>
+                        <span class="badge {% if channel.is_active %}bg-success{% else %}bg-danger{% endif %} rounded-pill px-4 py-2 fs-6">
+                            {% if channel.is_active %}Faol{% else %}O'chirilgan{% endif %}
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Kanal ma'lumotlari -->
+                <div class="card-body px-4 py-4">
+                    <div class="channel-info mb-4">
+                        <label class="text-muted mb-2 fs-6">Kanal ID:</label>
+                        <div class="bg-light p-3 rounded-3">
+                            <code class="fs-5">{{ channel.channel_id }}</code>
+                        </div>
+                    </div>
+
+                    <!-- Amallar -->
+                    <div class="channel-actions d-flex gap-3">
+                        <a href="{% url 'announcement:toggle_channel' channel.id %}" 
+                           class="btn {% if channel.is_active %}btn-warning{% else %}btn-success{% endif %} flex-grow-1 py-3 fs-5">
+                            <i class="fas {% if channel.is_active %}fa-pause{% else %}fa-play{% endif %} me-2"></i>
+                            {% if channel.is_active %}To'xtatish{% else %}Yoqish{% endif %}
+                        </a>
+                        <div class="btn-group">
+                            <a href="{% url 'announcement:edit_channel' channel.id %}" 
+                               class="btn btn-primary py-3 px-4" 
+                               title="Tahrirlash">
+                                <i class="fas fa-edit fs-5"></i>
+                            </a>
+                            <a href="{% url 'announcement:delete_channel' channel.id %}" 
+                               class="btn btn-danger py-3 px-4" 
+                               onclick="return confirm('Kanalni o\'chirmoqchimisiz?')"
+                               title="O'chirish">
+                                <i class="fas fa-trash fs-5"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Qo'shimcha ma'lumot -->
+                <div class="card-footer bg-white border-0 px-4 py-3">
+                    <small class="text-muted fs-6">
+                        <i class="fas fa-clock me-1"></i>
+                        Qo'shilgan: {{ channel.added_at|date:"d.m.Y H:i" }}
+                    </small>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info border-0 shadow text-center p-5">
+                <i class="fas fa-info-circle fa-4x mb-4 text-info"></i>
+                <h3>Kanallar mavjud emas</h3>
+                <p class="text-muted fs-5 mb-0">Yangi kanal qo'shish uchun yuqoridagi tugmani bosing</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.channel-card {
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.channel-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.15) !important;
+}
+
+.btn {
+    border-radius: 12px;
+    font-weight: 500;
+}
+
+.btn-group .btn:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+}
+
+.btn-group .btn:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+}
+
+.badge {
+    font-weight: 500;
+}
+
+.channel-info code {
+    word-break: break-all;
+}
+
+.card-header {
+    border-radius: 20px 20px 0 0 !important;
+}
+
+.card-footer {
+    border-radius: 0 0 20px 20px !important;
+}
+
+/* Action tugmalar uchun hover effektlari */
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-danger:hover {
+    background-color: #dc3545;
+}
+
+.btn-warning:hover {
+    background-color: #ffc107;
+}
+
+.btn-success:hover {
+    background-color: #28a745;
+}
+</style>
+{% endblock %} 

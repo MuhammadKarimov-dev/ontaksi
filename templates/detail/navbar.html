@@ -1,47 +1,42 @@
-<nav class="navbar navbar-expand-lg">
-    <div class="container">
-        <a class="navbar-brand fw-bold text-dark" href="{% url 'announcement:list' %}">Codefy</a>
+<nav class="navbar navbar-expand-lg bg-white border-bottom sticky-top">
+    <div class="container-fluid px-3 px-lg-4">
+        <a class="navbar-brand fw-bold" href="{% url 'announcement:list' %}">
+            <i class="fas fa-broadcast-tower text-primary me-2"></i>Codefy
+        </a>
 
-        <!-- Mobil versiyada faqat Kirish yoki Chiqish tugmasi ko'rinadi -->
-        <div class="d-lg-none">
-            {% if user.is_authenticated %}
-                <a class="nav-link logout-link" href="{% url 'announcement:logout' %}">
-                    <i class="bi bi-box-arrow-right"></i> Chiqish
-                </a>
-            {% else %}
-                <a class="nav-link login-link" href="{% url 'announcement:login' %}">
-                    <i class="bi bi-person"></i> Kirish
-                </a>
-            {% endif %}
-        </div>
+        <!-- Mobil menyu tugmasi -->
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <i class="fas fa-bars"></i>
+        </button>
 
-        <div class="collapse navbar-collapse justify-content-end d-none d-lg-flex" id="navbarNav">
-            <ul class="navbar-nav">
+        <!-- Menyu -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav align-items-center ms-auto gap-2 py-2 py-lg-0">
                 {% if user.is_authenticated %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'announcement:create_announcement' %}">
-                            <i class="bi bi-plus-circle"></i> E'lon berish
+                    <li class="nav-item w-100">
+                        <a class="nav-link px-3 py-2 rounded-pill" href="{% url 'announcement:create_announcement' %}">
+                            <i class="fas fa-plus-circle me-2"></i> E'lon
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'announcement:list' %}">
-                            <i class="bi bi-megaphone"></i> Mening E'lonlarim
+                    <li class="nav-item w-100">
+                        <a class="nav-link px-3 py-2 rounded-pill" href="{% url 'announcement:list' %}">
+                            <i class="fas fa-bullhorn me-2"></i> E'lonlarim
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'announcement:channel_list' %}">
-                            <i class="bi bi-broadcast"></i> Kanallar
+                    <li class="nav-item w-100">
+                        <a class="nav-link px-3 py-2 rounded-pill" href="{% url 'announcement:channel_list' %}">
+                            <i class="fas fa-broadcast-tower me-2"></i> Kanallar
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link logout-link" href="{% url 'announcement:logout' %}">
-                            <i class="bi bi-box-arrow-right"></i> Chiqish
+                    <li class="nav-item w-100 mt-2 mt-lg-0">
+                        <a class="btn btn-outline-danger btn-sm w-100" href="{% url 'announcement:logout' %}">
+                            <i class="fas fa-sign-out-alt me-2"></i> Chiqish
                         </a>
                     </li>
                 {% else %}
-                    <li class="nav-item">
-                        <a class="nav-link login-link" href="{% url 'announcement:login' %}">
-                            <i class="bi bi-person"></i> Kirish
+                    <li class="nav-item w-100">
+                        <a class="btn btn-primary w-100" href="{% url 'announcement:login' %}">
+                            <i class="fas fa-sign-in-alt me-2"></i> Kirish
                         </a>
                     </li>
                 {% endif %}
@@ -49,3 +44,49 @@
         </div>
     </div>
 </nav>
+
+<style>
+.navbar {
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    min-height: 60px;
+}
+
+.nav-link {
+    color: #666;
+    transition: all 0.2s;
+}
+
+.nav-link:hover {
+    color: #333;
+    background: #f8f9fa;
+}
+
+.navbar-brand {
+    font-size: 1.3rem;
+    color: #333;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+}
+
+/* Mobil responsive */
+@media (max-width: 991px) {
+    .navbar-collapse {
+        background: white;
+        padding: 1rem;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        margin-top: 1rem;
+    }
+    
+    .nav-link {
+        padding: 0.8rem 1rem;
+        border-radius: 8px;
+    }
+    
+    .btn {
+        padding: 0.8rem 1rem;
+    }
+}
+</style>

@@ -146,84 +146,137 @@ document.addEventListener('DOMContentLoaded', function() {
 {% endblock %}
 
 {% block content %}
-<div class="container py-4">
-    <div class="row justify-content-center">
-        <div class="col-12 col-md-8 col-lg-6">
-            <div class="card border-0 shadow-sm">
-                <div class="card-header py-3">
-                    <h3 class="mb-0 fs-4 text-center">Mening Xabarim</h3>
-                </div>
-                <div class="card-body p-4">
-                    {% if announcement %}
-                    <div class="mb-4">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h5 class="mb-0">Status:</h5>
-                            {% if announcement.is_active %}
-                            <span class="badge bg-success">Faol</span>
-                            {% else %}
-                            <span class="badge bg-secondary">To'xtatilgan</span>
-                            {% endif %}
-                        </div>
-                        
-                        <div class="mb-3">
-                            <h5>Xabar matni:</h5>
-                            <p class="mb-0">{{ announcement.message }}</p>
-                        </div>
-
-                        <div class="mb-3">
-                            <h5>Interval:</h5>
-                            <p class="mb-0">{{ announcement.interval }} daqiqa</p>
-                        </div>
-
-                        <div class="mb-3">
-                            <h5>Yaratilgan vaqti:</h5>
-                            <p class="mb-0">{{ announcement.created_at|date:"d.m.Y H:i" }}</p>
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-center gap-2">
-                        {% if announcement.is_active %}
-                        <a href="{% url 'announcement:stop_announcement' announcement.id %}" class="btn btn-danger">
-                            <i class="bi bi-stop-circle"></i> To'xtatish
-                        </a>
-                        {% else %}
-                        <a href="{% url 'announcement:start_announcement' announcement.id %}" class="btn btn-success">
-                            <i class="bi bi-play-circle"></i> Boshlash
-                        </a>
-                        {% endif %}
-                        <a href="{% url 'announcement:edit' announcement.id %}" class="btn btn-primary">
-                            <i class="bi bi-pencil"></i> Tahrirlash
-                        </a>
-                    </div>
-                    {% else %}
-                    <p class="text-center mb-0">Hozircha xabarlar yo'q</p>
-                    {% endif %}
-                </div>
+<div class="container-fluid py-5 px-4">
+    <!-- Sarlavha -->
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <div>
+            <h2 class="display-5 fw-bold mb-3">Mening Xabarim</h2>
+            <div class="badge bg-primary fs-5 px-4 py-2">
+                <i class="fas fa-broadcast-tower me-2"></i>
+                Holat: {% if announcement.is_active %}Faol{% else %}To'xtatilgan{% endif %}
             </div>
         </div>
     </div>
+
+    <!-- Xabarlar -->
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-sm">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <!-- Xabar kartasi -->
+    {% if announcement %}
+    <div class="card border-0 shadow-lg rounded-4">
+        <div class="card-header bg-white border-0 pt-4 pb-2 px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="card-title fw-bold mb-0 fs-4">E'lon matni</h4>
+                <span class="badge {% if announcement.is_active %}bg-success{% else %}bg-secondary{% endif %} rounded-pill px-4 py-2 fs-6">
+                    {% if announcement.is_active %}Faol{% else %}To'xtatilgan{% endif %}
+                </span>
+            </div>
+        </div>
+        
+        <div class="card-body p-4">
+            <!-- Xabar matni -->
+            <div class="bg-light p-4 rounded-3 mb-4">
+                <p class="fs-5 mb-0">{{ announcement.message }}</p>
+            </div>
+
+            <!-- Interval -->
+            <div class="mb-4">
+                <label class="text-muted fs-6 mb-2">Yuborish intervali:</label>
+                <div class="bg-light p-3 rounded-3 d-flex align-items-center">
+                    <i class="fas fa-clock me-2 text-primary"></i>
+                    <span class="fs-5">{{ announcement.interval }} daqiqa</span>
+                </div>
+            </div>
+
+            <!-- Amallar -->
+            <div class="d-flex gap-3">
+                {% if announcement.is_active %}
+                <a href="{% url 'announcement:stop_announcement' announcement.id %}" 
+                   class="btn btn-warning flex-grow-1 py-3 fs-5">
+                    <i class="fas fa-pause me-2"></i> To'xtatish
+                </a>
+                {% else %}
+                <a href="{% url 'announcement:start_announcement' announcement.id %}" 
+                   class="btn btn-success flex-grow-1 py-3 fs-5">
+                    <i class="fas fa-play me-2"></i> Boshlash
+                </a>
+                {% endif %}
+                
+                <a href="{% url 'announcement:edit' announcement.id %}" 
+                   class="btn btn-primary py-3 px-4 fs-5">
+                    <i class="fas fa-edit me-2"></i> Tahrirlash
+                </a>
+            </div>
+        </div>
+
+        <div class="card-footer bg-white border-0 px-4 py-3">
+            <small class="text-muted fs-6">
+                <i class="fas fa-calendar me-1"></i>
+                Yaratilgan vaqti: {{ announcement.created_at|date:"d.m.Y H:i" }}
+            </small>
+        </div>
+    </div>
+    {% else %}
+    <div class="alert alert-info border-0 shadow text-center p-5">
+        <i class="fas fa-info-circle fa-4x mb-4 text-info"></i>
+        <h3>Xabarlar mavjud emas</h3>
+        <p class="text-muted fs-5 mb-4">Yangi xabar yaratish uchun quyidagi tugmani bosing</p>
+        <a href="{% url 'announcement:create' %}" class="btn btn-primary btn-lg px-5 py-3 fs-5">
+            <i class="fas fa-plus me-2"></i> Yangi xabar yaratish
+        </a>
+    </div>
+    {% endif %}
 </div>
 
 <style>
-.announcement-card {
-    background: white;
+.card {
+    transition: all 0.3s ease;
 }
 
-.message-box {
-    border-left: 4px solid #007bff;
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.15) !important;
 }
 
 .btn {
-    padding: 8px 16px;
+    border-radius: 12px;
     font-weight: 500;
+    transition: all 0.3s ease;
 }
 
-.btn i {
-    margin-right: 5px;
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
 }
 
 .badge {
-    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Action tugmalar uchun hover effektlari */
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+.btn-danger:hover {
+    background-color: #dc3545;
+}
+
+.btn-warning:hover {
+    background-color: #ffc107;
+}
+
+.btn-success:hover {
+    background-color: #28a745;
 }
 </style>
 {% endblock %}

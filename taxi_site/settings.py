@@ -12,9 +12,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-@i)!+(41weo9jc21w&r3959^0$d)bytq4+8_r40!-7b2jh0$wj'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True  # Development uchun
 
-ALLOWED_HOSTS = ['81.200.146.99', 'ontaksi.uz', 'www.ontaksi.uz']
+ALLOWED_HOSTS = ['*']  # Development uchun
 
 
 # Application definition

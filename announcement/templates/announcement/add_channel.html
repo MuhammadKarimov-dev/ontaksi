@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title mb-0">Yangi kanal qo'shish</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        
+                        {% if messages %}
+                        <div class="messages mb-4">
+                            {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+
+                        <div class="form-group mb-4">
+                            <label for="name" class="form-label fw-bold">Kanal nomi</label>
+                            <input type="text" 
+                                   class="form-control form-control-lg" 
+                                   id="name" 
+                                   name="name"
+                                   placeholder="Kanal nomini kiriting" 
+                                   value="{{ name|default:'' }}"
+                                   required>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="channel_id" class="form-label fw-bold">Kanal manzili</label>
+                            <input type="text" 
+                                   class="form-control form-control-lg" 
+                                   id="channel_id" 
+                                   name="channel_id"
+                                   placeholder="Kanal username yoki ID raqami" 
+                                   value="{{ channel|default:'' }}"
+                                   required>
+                            <div class="invalid-feedback">
+                                Iltimos, kanal manzilini kiriting
+                            </div>
+                            <div class="form-text text-muted mt-2">
+                                <small>
+                                    <strong>Quyidagi formatlardan birini kiriting:</strong>
+                                    <ul class="mt-2">
+                                        <li>Kanal usernamesi: <code>@kanal_nomi</code></li>
+                                        <li>Kanal havolasi: <code>https://t.me/kanal_nomi</code></li>
+                                        <li>Kanal ID raqami: <code>-100123456789</code></li>
+                                    </ul>
+                                </small>
+                            </div>
+                        </div>
+
+                        <div class="form-group d-flex gap-3">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-plus"></i> Qo'shish
+                            </button>
+                            <a href="{% url 'announcement:channel_list' %}" class="btn btn-secondary btn-lg">
+                                <i class="fas fa-times"></i> Bekor qilish
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Form validatsiyasi uchun JavaScript -->
+<script>
+(function () {
+    'use strict'
+    var forms = document.querySelectorAll('.needs-validation')
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault()
+                event.stopPropagation()
+            }
+            form.classList.add('was-validated')
+        }, false)
+    })
+})()
+</script>
+{% endblock %} 

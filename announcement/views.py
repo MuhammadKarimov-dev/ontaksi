@@ -42,9 +42,14 @@ def announcement_list(request):
 
 @login_required
 def create_announcement(request):
+    # Agar birorta e'lon mavjud bo'lsa, yaratishga ruxsat bermaymiz
+    if Announcement.objects.exists():
+        messages.error(request, "Faqat bitta e'lon mavjud bo'lishi mumkin!")
+        return redirect('announcement:list')
+    
     if request.method == 'POST':
         message = request.POST.get('message')
-        interval = request.POST.get('interval', 60)  # Default 60 sekund
+        interval = request.POST.get('interval', 60)
         
         if message:
             announcement = Announcement.objects.create(
@@ -53,10 +58,10 @@ def create_announcement(request):
                 interval=interval,
                 is_active=False
             )
-            messages.success(request, 'Хабар муваффақиятли яратилди!')
+            messages.success(request, 'Xabar muvaffaqiyatli yaratildi!')
             return redirect('announcement:list')
         else:
-            messages.error(request, 'Хабар матни киритилмаган!')
+            messages.error(request, 'Xabar matni kiritilmagan!')
             
     return render(request, 'announcement/create.html')
 
@@ -98,18 +103,17 @@ def edit_announcement(request, announcement_id):
 
 @login_required
 def start_announcement(request, announcement_id):
-    announcement = get_object_or_404(Announcement, id=announcement_id)
-    
-    if not announcement.is_active:
+    try:
+        announcement = Announcement.objects.get(id=announcement_id)
         announcement.is_active = True
         announcement.save()
         
-        # Yangi thread boshlash
-        start_announcement_thread(announcement)
+        start_announcement_thread(announcement_id)
         
-        messages.success(request, "E'lon muvaffaqiyatli ishga tushirildi!")
-    
-    return redirect('announcement:list')
+        return redirect('announcement:list')
+        
+    except Announcement.DoesNotExist:
+        return redirect('announcement:list')
 
 @login_required
 def stop_announcement(request, announcement_id):
@@ -123,9 +127,9 @@ def stop_announcement(request, announcement_id):
 
 @login_required
 def delete_announcement(request, announcement_id):
-    announcement = get_object_or_404(Announcement, id=announcement_id)
-    announcement.delete()
-    return JsonResponse({'status': 'success'})
+    # O'chirish funksiyasini o'chirib qo'yamiz
+    messages.error(request, "E'lonni o'chirib bo'lmaydi!")
+    return redirect('announcement:list')
 
 @login_required
 def channel_list(request):
@@ -134,54 +138,55 @@ def channel_list(request):
 
 @login_required
 def add_channel(request):
+    context = {}
+    
     if request.method == 'POST':
-        channel_id = request.POST.get('channel_id', '').strip()
-        name = request.POST.get('name', '').strip()
+        channel = request.POST.get('channel_id')
+        name = request.POST.get('name')
+        type = request.POST.get('type', 'channel')
         
-        if not channel_id or not name:
-            messages.error(request, 'Kanal ID va nomi bo\'sh bo\'lishi mumkin emas!')
-            return redirect('announcement:add_channel')
-            
-        # Chat ID ni tozalash va formatlash
-        clean_id = channel_id.replace('@', '').strip()
+        if not channel:
+            messages.error(request, "Manzil kiritilmagan!")
+            return render(request, 'announcement/add_channel.html', context)
         
-        if clean_id.isdigit():
-            # Raqamli ID
-            raw_id = clean_id  # Asl ID ni saqlab qo'yamiz
-            formatted_id = f"-100{clean_id}"  # Telegram formatidagi ID
-        elif clean_id.startswith('-100'):
-            raw_id = clean_id[4:]  # -100 ni olib tashlaymiz
-            formatted_id = clean_id
-        elif clean_id.startswith('-'):
-            raw_id = clean_id[1:]  # - ni olib tashlaymiz
-            formatted_id = f"-100{raw_id}"
-        else:
-            # Username
-            raw_id = clean_id
-            formatted_id = f"@{clean_id}"
-
-        # Mavjud chat ID larni tekshirish
-        existing = TelegramChannel.objects.filter(
-            channel_id__in=[formatted_id, f"@{clean_id}", clean_id]
-        ).first()
-        
-        if existing:
-            messages.error(request, f'Bu kanal allaqachon mavjud! ({raw_id})')
-            return redirect('announcement:channel_list')
-
         try:
-            channel = TelegramChannel.objects.create(
-                channel_id=formatted_id,
-                channel_name=name if name != clean_id else raw_id,  # Agar nom ID bilan bir xil bo'lsa
-                is_active=True
-            )
-            messages.success(request, f'Kanal muvaffaqiyatli qo\'shildi: {raw_id}')
-        except Exception as e:
-            messages.error(request, f'Xatolik yuz berdi: {str(e)}')
+            channel = channel.strip()
+            name = name.strip() if name else channel
             
-        return redirect('announcement:channel_list')
-        
-    return render(request, 'announcement/add_channel.html')
+            # Kanal formatini tekshirish va tozalash
+            if channel.startswith('https://t.me/'):
+                channel = '@' + channel[13:]
+            elif channel.startswith('t.me/'):
+                channel = '@' + channel[5:]
+            elif not channel.startswith('@') and not channel.startswith('-100'):
+                channel = '@' + channel
+            
+            # Mavjud kanallarni tekshirish
+            if TelegramChannel.objects.filter(channel_id=channel).exists():
+                messages.error(request, "Bu kanal/guruh allaqachon qo'shilgan!")
+                context.update({'channel': channel, 'name': name, 'type': type})
+                return render(request, 'announcement/add_channel.html', context)
+            
+            # Yangi kanal yaratish
+            telegram_channel = TelegramChannel(
+                channel_id=channel,
+                name=name,
+                type=type
+            )
+            telegram_channel.clean()
+            telegram_channel.save()
+            
+            messages.success(request, "Muvaffaqiyatli qo'shildi!")
+            return redirect('announcement:channel_list')
+            
+        except ValueError as e:
+            messages.error(request, str(e))
+            context.update({'channel': channel, 'name': name, 'type': type})
+        except Exception as e:
+            messages.error(request, f"Xatolik yuz berdi: {str(e)}")
+            context.update({'channel': channel, 'name': name, 'type': type})
+    
+    return render(request, 'announcement/add_channel.html', context)
 
 @login_required
 def edit_channel(request, channel_id):
@@ -190,7 +195,7 @@ def edit_channel(request, channel_id):
     if request.method == 'POST':
         name = request.POST.get('name', '').strip()
         if name:
-            channel.channel_name = name
+            channel.name = name
             channel.save()
             messages.success(request, 'Kanal nomi muvaffaqiyatli o\'zgartirildi')
         return redirect('announcement:channel_list')

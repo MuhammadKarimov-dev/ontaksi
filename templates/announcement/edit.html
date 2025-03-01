@@ -1,26 +1,104 @@
 {% extends 'base.html' %}
 
-{% block title %}Эълонни таҳрирлаш{% endblock %}
+{% block title %}E'lonni tahrirlash{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>E'lonni tahrirlash</h2>
-    
-    <form method="post">
-        {% csrf_token %}
-        
-        <div class="form-group">
-            <label>Xabar matni:</label>
-            <textarea name="message" class="form-control" rows="5">{{ announcement.message }}</textarea>
+<div class="container-fluid py-4 px-3 px-lg-4">
+    <div class="row justify-content-center">
+        <div class="col-12 col-md-10 col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-white border-0 pt-4 pb-3 px-3 px-sm-4">
+                    <h4 class="mb-0 fw-bold">
+                        <i class="fas fa-edit text-primary me-2"></i>
+                        E'lonni tahrirlash
+                    </h4>
+                </div>
+                
+                <div class="card-body p-3 p-sm-4">
+                    <form method="post">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-medium mb-2">Xabar matni</label>
+                            <textarea 
+                                name="message" 
+                                class="form-control" 
+                                rows="5"
+                                placeholder="E'lon matnini kiriting..."
+                                required
+                            >{{ announcement.message }}</textarea>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-medium mb-2">
+                                Yuborish oralig'i
+                                <small class="text-muted">(daqiqa)</small>
+                            </label>
+                            <input 
+                                type="number" 
+                                name="interval" 
+                                class="form-control" 
+                                value="{{ announcement.interval }}" 
+                                min="1"
+                                required
+                            >
+                        </div>
+                        
+                        <div class="d-flex flex-column flex-sm-row gap-2">
+                            <button type="submit" class="btn btn-primary px-4 py-2 w-100 w-sm-auto">
+                                <i class="fas fa-save me-2"></i> Saqlash
+                            </button>
+                            <a href="{% url 'announcement:list' %}" class="btn btn-light py-2 w-100 w-sm-auto">
+                                <i class="fas fa-times me-2"></i> Bekor qilish
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
-        
-        <div class="form-group">
-            <label>Yuborish oralig'i (daqiqa):</label>
-            <input type="number" name="interval" class="form-control" value="{{ announcement.interval }}" min="1">
-        </div>
-        
-        <button type="submit" class="btn btn-primary mt-3">Saqlash</button>
-        <a href="{% url 'announcement:list' %}" class="btn btn-secondary mt-3">Bekor qilish</a>
-    </form>
+    </div>
 </div>
+
+<style>
+.form-control {
+    border-radius: 8px;
+    border-color: #dee2e6;
+    padding: 0.8rem 1rem;
+}
+
+.form-control:focus {
+    border-color: #80bdff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.15);
+}
+
+.btn {
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.card {
+    border-radius: 12px;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+/* Mobil responsive */
+@media (max-width: 576px) {
+    .card {
+        border-radius: 10px;
+    }
+    
+    .form-control {
+        font-size: 16px; /* iOS inputlar uchun */
+    }
+    
+    .btn {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+</style>
 {% endblock %}

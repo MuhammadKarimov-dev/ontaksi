@@ -1,4 +1,4 @@
-#!/Users/macbookair/Documents/ontaksi/.venv/bin/python3.10
+#!/Users/macbookair/Desktop/ontaksi/.venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
